@@ -1,0 +1,17 @@
+{
+  "name": "CurseForge Embed",
+  "short_name": "CF Embed",
+  "description": "A modern React component for embedding CurseForge projects",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9F7F5",
+  "theme_color": "#F16436",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+} 
