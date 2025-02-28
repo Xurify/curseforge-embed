@@ -13,9 +13,26 @@ export async function GET(
   const revalidate = parseInt(searchParams.get('revalidate') || String(DEFAULT_REVALIDATE_SECONDS));
   
   try {
-    const data = await CurseForgeAPI.getProject(projectId, { revalidate });
+    const fullData = await CurseForgeAPI.getProject(projectId, { revalidate });
+    
+    const filteredData = {
+      id: fullData.id,
+      title: fullData.title,
+      summary: fullData.summary,
+      description: fullData.description?.substring(0, 5000),
+      game: fullData.game,
+      type: fullData.type,
+      urls: fullData.urls,
+      thumbnail: fullData.thumbnail,
+      created_at: fullData.created_at,
+      downloads: fullData.downloads,
+      license: fullData.license,
+      categories: fullData.categories,
+      members: fullData.members,
+      download: fullData.download
+    };
 
-    return NextResponse.json(data, {
+    return NextResponse.json(filteredData, {
       status: 200,
       headers: {
         'Cache-Control': `s-maxage=${revalidate}, stale-while-revalidate`,
