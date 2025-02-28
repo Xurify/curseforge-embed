@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   description: "A modern React component for embedding CurseForge projects in your Next.js application",
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
   },
@@ -31,6 +30,9 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   manifest: '/manifest.json',
+};
+
+export const viewport: Viewport = {
   themeColor: '#F16436',
 };
 
@@ -42,9 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <meta name="theme-color" content="#F16436" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
