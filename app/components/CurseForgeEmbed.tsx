@@ -39,6 +39,7 @@ export default async function CurseForgeEmbed({
   try {
     data = await getProjectData(projectId, revalidate);
   } catch (error) {
+    console.error('CurseForgeEmbed error:', error);
     return (
       fallback || (
         <div className="border border-red-200 bg-red-50 rounded-lg p-4 text-red-700">
