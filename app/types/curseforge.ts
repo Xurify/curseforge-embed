@@ -38,7 +38,7 @@ export interface CurseForgeProject {
   donate: string;
   categories: string[];
   members: CurseForgeMember[];
-  links: any[];
+  links: unknown[];
   files: CurseForgeFile[];
   versions: Record<string, CurseForgeFile[]>;
   download: CurseForgeFile;
