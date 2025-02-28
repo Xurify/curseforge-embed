@@ -1,20 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { CurseForgeAPI } from '@/app/lib/curseforge-api';
+import { NextRequest } from "next/server";
+import { CurseForgeAPI } from "@/app/lib/curseforge-api";
 
 const DEFAULT_REVALIDATE_SECONDS = 3600;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   const { projectId } = await params;
 
+  console.log("request.nextUrl", request.url);
+
   const searchParams = request.nextUrl.searchParams;
-  const revalidate = parseInt(searchParams.get('revalidate') || String(DEFAULT_REVALIDATE_SECONDS));
-  
+  const revalidate = parseInt(
+    searchParams.get("revalidate") || String(DEFAULT_REVALIDATE_SECONDS)
+  );
+
   try {
     const fullData = await CurseForgeAPI.getProject(projectId, { revalidate });
-    
+
     const filteredData = {
       id: fullData.id,
       title: fullData.title,
@@ -29,21 +33,21 @@ export async function GET(
       license: fullData.license,
       categories: fullData.categories,
       members: fullData.members,
-      download: fullData.download
+      download: fullData.download,
     };
 
-    return NextResponse.json(filteredData, {
+    return Response.json(filteredData, {
       status: 200,
       headers: {
-        'Cache-Control': `s-maxage=${revalidate}, stale-while-revalidate`,
+        "Cache-Control": `s-maxage=${revalidate}, stale-while-revalidate`,
       },
     });
   } catch (error) {
     console.error(`Error fetching CurseForge project ${projectId}:`, error);
-    
-    return NextResponse.json(
-      { error: 'Failed to fetch CurseForge project' },
+
+    return Response.json(
+      { error: "Failed to fetch CurseForge project" },
       { status: 500 }
     );
   }
-} 
+}
