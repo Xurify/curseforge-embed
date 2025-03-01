@@ -5,8 +5,7 @@ import { CurseForgeProject } from '../types/curseforge';
  * Based on the cfwidget.com API: https://api.cfwidget.com/
  */
 export class CurseForgeAPI {
-  private static baseUrl = 'https://api.cfwidget.com';
-  
+  public static DEFAULT_REVALIDATE = 3600;
   /**
    * Fetch a project by its ID
    * @param projectId The CurseForge project ID
@@ -15,7 +14,7 @@ export class CurseForgeAPI {
    */
 
   static async getProject(projectId: number, options: { revalidate?: number } = {}): Promise<CurseForgeProject> {
-    const { revalidate = 3600 } = options;
+    const { revalidate = CurseForgeAPI.DEFAULT_REVALIDATE } = options;
 
     const url = new URL(`/api/curseforge/${projectId}`, process.env.NEXT_PUBLIC_APP_URL);
       if (revalidate) {
@@ -24,7 +23,7 @@ export class CurseForgeAPI {
       
       const response = await fetch(url, {
         next: { 
-          revalidate: revalidate || 3600 
+          revalidate: revalidate || CurseForgeAPI.DEFAULT_REVALIDATE 
         }
       });
       

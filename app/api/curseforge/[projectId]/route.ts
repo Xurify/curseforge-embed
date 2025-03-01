@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-
-const DEFAULT_REVALIDATE_SECONDS = 3600;
+import { CurseForgeAPI } from "@/app/lib/curseforge-api";
 
 export async function GET(
   request: NextRequest,
@@ -10,7 +9,7 @@ export async function GET(
 
   const searchParams = request.nextUrl.searchParams;
   const revalidate = parseInt(
-    searchParams.get("revalidate") || String(DEFAULT_REVALIDATE_SECONDS)
+    searchParams.get("revalidate") || String(CurseForgeAPI.DEFAULT_REVALIDATE)
   );
 
   try {
