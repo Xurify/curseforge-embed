@@ -9,7 +9,7 @@ interface CurseForgeEmbedProps {
   revalidate?: number;
 }
 
-async function getProjectData(projectId: number | string, revalidate?: number): Promise<CurseForgeProject> {
+export async function getProjectData(projectId: number | string, revalidate?: number): Promise<CurseForgeProject> {
   const url = new URL(`/api/curseforge/${projectId}`, process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
   if (revalidate) {
     url.searchParams.set('revalidate', revalidate.toString());
