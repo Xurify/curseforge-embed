@@ -12,6 +12,10 @@ export default async function ProjectPage({
   const { projectId } = await params;
   const { revalidate, size } = await searchParams;
 
+  if (!parseInt(projectId)) {
+    return null;
+  }
+
   try {
     const data = await CurseForgeAPI.getProject(Number(projectId), { revalidate: Number(revalidate) });
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
