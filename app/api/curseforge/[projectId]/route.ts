@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { CurseForgeProject } from "@/app/types/curseforge";
 
 const DEFAULT_REVALIDATE_SECONDS = 3600;
 
