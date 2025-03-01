@@ -19,8 +19,8 @@ export default function Home() {
           CurseForge Embed
         </h1>
         <p className="text-[#6D7072] mb-8 max-w-3xl">
-          A React component for embedding CurseForge projects in your Next.js application. 
-          Built with a Next.js API wrapper for optimal performance, security, and SEO.
+          A simple and easy way to embed CurseForge projects on your website. <br />
+          Choose between embedding the project as a an image, iframe, or using the React component.
         </p>
         
         <div className="space-y-12">

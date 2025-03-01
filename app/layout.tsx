@@ -13,27 +13,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CurseForge Embed - React Component for Minecraft Mods",
-  description: "A modern React component for embedding CurseForge projects in your Next.js application",
+  title: "CurseForge Embed",
+  description:
+    "A simple and easy way to embed CurseForge projects on your website",
   icons: {
-    icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-    ],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
-  authors: [
-    { name: 'CurseForge Embed Team' }
-  ],
-  keywords: ['curseforge', 'minecraft', 'mods', 'react', 'nextjs', 'embed'],
+  applicationName: "CurseForge Embed",
+  authors: [{ name: "Xurify" }],
+  creator: "Xurify",
+  publisher: "Xurify",
+  keywords: ["curseforge", "minecraft", "mods", "react", "nextjs", "embed"],
   openGraph: {
-    title: 'CurseForge Embed Component',
-    description: 'Embed CurseForge projects in your Next.js application',
-    images: ['/og-image.svg'],
+    title: "CurseForge Embed",
+    description:
+      "A simple and easy way to embed CurseForge projects on your website",
+    images: ["/og-image.svg"],
   },
-  metadataBase: new URL('https://curseforge-embed.vercel.app'),
+  metadataBase: new URL("https://curseforge-embed.vercel.app"),
 };
 
 export const viewport: Viewport = {
-  themeColor: '#F16436',
+  themeColor: "#F16436",
 };
 
 export default function RootLayout({
