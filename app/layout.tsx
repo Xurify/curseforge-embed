@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'CurseForge Embed Component',
     description: 'Embed CurseForge projects in your Next.js application',
-    images: ['/og-image.png'],
+    images: ['/og-image.svg'],
   },
-  manifest: '/manifest.json',
+  metadataBase: new URL('https://curseforge-embed.vercel.app'),
 };
 
 export const viewport: Viewport = {
