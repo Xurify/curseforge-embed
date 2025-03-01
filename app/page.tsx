@@ -4,9 +4,9 @@ import ClientCurseForgeEmbed from './components/ClientCurseForgeEmbed';
 export default function Home() {
   // TODO: Remove later - Example project IDs from CurseForge
   const projectIds = {
-    elytraAssistant: "1181141",
-    jeiJustEnoughItems: "238222",
-    waystones: "245755",
+    elytraAssistant: 1181141,
+    jeiJustEnoughItems: 238222,
+    waystones: 245755,
   };
 
   return (

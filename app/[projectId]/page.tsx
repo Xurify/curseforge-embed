@@ -1,4 +1,4 @@
-import { getProjectData } from "../components/CurseForgeEmbed";
+import { CurseForgeAPI } from "../lib/curseforge-api";
 import { CurseForgeEmbedError } from "../components/CurseForgeEmbedError";
 import { CurseForgeEmbedSkeleton } from "../components/CurseForgeEmbedSkeleton";
 
@@ -13,7 +13,7 @@ export default async function ProjectPage({
   const { revalidate, size } = await searchParams;
 
   try {
-    const data = await getProjectData(projectId, Number(revalidate));
+    const data = await CurseForgeAPI.getProject(Number(projectId), { revalidate: Number(revalidate) });
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
     console.error("Error fetching project data:", error);

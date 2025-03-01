@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { CurseForgeAPI } from "@/app/lib/curseforge-api";
+import { CurseForgeProject } from "@/app/types/curseforge";
 
 const DEFAULT_REVALIDATE_SECONDS = 3600;
 
@@ -15,7 +15,20 @@ export async function GET(
   );
 
   try {
-    const fullData = await CurseForgeAPI.getProject(projectId, { revalidate });
+    const baseUrl = "https://api.cfwidget.com";
+    const externalResponse = await fetch(`${baseUrl}/${projectId}`, {
+      next: {
+        revalidate,
+      },
+    });
+
+    if (!externalResponse.ok) {
+      throw new Error(
+        `Failed to fetch project data: ${externalResponse.status} ${externalResponse.statusText}`
+      );
+    }
+
+    const fullData = await externalResponse.json();
 
     const filteredData = {
       id: fullData.id,

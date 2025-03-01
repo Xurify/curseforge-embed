@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { CurseForgeProject } from '../types/curseforge';
+import { useState, useEffect } from "react";
+import { CurseForgeAPI } from "../lib/curseforge-api";
+import { CurseForgeProject } from "../types/curseforge";
 
 interface UseCurseForgeProjectOptions {
   revalidate?: number;
@@ -31,19 +32,9 @@ export function useCurseForgeProject(
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        const url = new URL(`/api/curseforge/${projectId}`, window.location.origin);
-        if (options.revalidate) {
-          url.searchParams.set('revalidate', options.revalidate.toString());
-        }
-        
-        const response = await fetch(url.toString());
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch project data: ${response.status}`);
-        }
-        
-        const projectData = await response.json();
+        const projectData = await CurseForgeAPI.getProject(Number(projectId), {
+          revalidate: options.revalidate,
+        });
         setData(projectData);
         setError(null);
       } catch (err) {
@@ -58,4 +49,4 @@ export function useCurseForgeProject(
   }, [projectId, options.revalidate]);
 
   return { data, error, loading };
-} 
+}

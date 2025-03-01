@@ -1,31 +1,12 @@
-import { CurseForgeProject } from "../types/curseforge";
+import { CurseForgeAPI } from "../lib/curseforge-api";
 import { CurseForgeEmbedSkeleton } from "./CurseForgeEmbedSkeleton";
 import { CurseForgeEmbedError } from "./CurseForgeEmbedError";
 
 interface CurseForgeEmbedProps {
-  projectId: number | string;
+  projectId: number;
   fallback?: React.ReactNode;
   size?: "default" | "small";
   revalidate?: number;
-}
-
-export async function getProjectData(projectId: number | string, revalidate?: number): Promise<CurseForgeProject> {
-  const url = new URL(`/api/curseforge/${projectId}`, process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
-  if (revalidate) {
-    url.searchParams.set('revalidate', revalidate.toString());
-  }
-  
-  const response = await fetch(url, {
-    next: { 
-      revalidate: revalidate || 3600 
-    }
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Failed to fetch project data: ${response.status}`);
-  }
-  
-  return response.json();
 }
 
 export default async function CurseForgeEmbed({
@@ -35,7 +16,7 @@ export default async function CurseForgeEmbed({
   revalidate,
 }: CurseForgeEmbedProps) {
   try {
-    const data = await getProjectData(projectId, revalidate);
+    const data = await CurseForgeAPI.getProject(projectId, { revalidate });
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
     console.error('CurseForgeEmbed error:', error);

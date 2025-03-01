@@ -13,21 +13,26 @@ export class CurseForgeAPI {
    * @param options Optional fetch configuration
    * @returns Promise with the project data
    */
-  static async getProject(
-    projectId: number | string,
-    options: { revalidate?: number } = {}
-  ): Promise<CurseForgeProject> {
+
+  static async getProject(projectId: number, options: { revalidate?: number } = {}): Promise<CurseForgeProject> {
     const { revalidate = 3600 } = options;
-    
-    const response = await fetch(`${this.baseUrl}/${projectId}`, {
-      next: { revalidate }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch project data: ${response.status} ${response.statusText}`);
-    }
-    
-    return response.json();
+
+    const url = new URL(`/api/curseforge/${projectId}`, process.env.NEXT_PUBLIC_APP_URL);
+      if (revalidate) {
+        url.searchParams.set('revalidate', revalidate.toString());
+      }
+      
+      const response = await fetch(url, {
+        next: { 
+          revalidate: revalidate || 3600 
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch project data: ${response.status}`);
+      }
+      
+      return response.json();
   }
   
   /**
