@@ -9,8 +9,6 @@ export async function GET(
 ) {
   const { projectId } = await params;
 
-  console.log("request.nextUrl", request.url);
-
   const searchParams = request.nextUrl.searchParams;
   const revalidate = parseInt(
     searchParams.get("revalidate") || String(DEFAULT_REVALIDATE_SECONDS)
