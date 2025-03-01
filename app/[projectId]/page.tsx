@@ -16,6 +16,7 @@ export default async function ProjectPage({
     const data = await getProjectData(projectId, Number(revalidate));
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
+    console.error("Error fetching project data:", error);
     // TODO: Display or redirect to 404
     return <CurseForgeEmbedError />;
   }
