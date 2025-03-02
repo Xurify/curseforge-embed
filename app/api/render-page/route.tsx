@@ -1,15 +1,11 @@
 import { NextRequest } from 'next/server';
 import { CurseForgeEmbedImageSkeleton } from '@/app/components/CurseForgeEmbedImageSkeleton';
-import { CurseForgeProject } from '@/app/types/curseforge';
-import { headers } from 'next/headers';
 
-// Component registry to map component names to actual components
 const componentRegistry = {
   CurseForgeEmbedImageSkeleton,
 };
 
 export async function GET(request: NextRequest) {
-  // Get query parameters
   const searchParams = request.nextUrl.searchParams;
   const componentName = searchParams.get('component');
   const propsJson = searchParams.get('props');
@@ -23,21 +19,22 @@ export async function GET(request: NextRequest) {
   let props;
   try {
     props = JSON.parse(propsJson);
-  } catch (e) {
+  } catch (error) {
+    console.error('Error parsing props JSON:', error);
     return new Response('Invalid props JSON', {
       status: 400,
     });
   }
   
-  // Get the component from the registry
   const Component = componentRegistry[componentName as keyof typeof componentRegistry];
   if (!Component) {
     return new Response(`Component ${componentName} not found`, {
       status: 404,
     });
   }
+
+  const staticMarkup = await renderToStaticMarkup(<Component {...props} />);
   
-  // Render the component
   const html = `
     <!DOCTYPE html>
     <html>
@@ -83,7 +80,7 @@ export async function GET(request: NextRequest) {
       </head>
       <body>
         <div id="component-container">
-          ${renderToStaticMarkup(<Component {...props} />)}
+          ${staticMarkup}
         </div>
       </body>
     </html>
@@ -96,11 +93,9 @@ export async function GET(request: NextRequest) {
   });
 }
 
-// Helper function to render React components to HTML
-function renderToStaticMarkup(component: React.ReactElement): string {
+async function renderToStaticMarkup(component: React.ReactElement): Promise<string> {
   try {
-    // In Next.js App Router, we need to use React's renderToStaticMarkup
-    const ReactDOMServer = require('react-dom/server');
+    const ReactDOMServer = await import('react-dom/server');
     return ReactDOMServer.renderToStaticMarkup(component);
   } catch (error) {
     console.error('Error rendering component to HTML:', error);

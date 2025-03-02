@@ -2,7 +2,6 @@ import { NextRequest } from 'next/server';
 import { CurseForgeAPI } from '@/app/lib/curseforge-api';
 import { generateCurseForgeImage } from '@/app/utils/serverImageGenerator';
 
-// Define the params type for Next.js API routes
 interface Params {
   id: string;
 }
@@ -16,25 +15,20 @@ export async function GET(
   { params }: { params: Params }
 ) {
   try {
-    // Get the project ID from the path
     const projectId = parseInt(params.id, 10);
     
     if (isNaN(projectId)) {
       return new Response('Invalid project ID', { status: 400 });
     }
     
-    // Get query parameters
     const { searchParams } = request.nextUrl;
     const size = searchParams.get('size') as 'default' | 'small' | null || 'default';
     const format = searchParams.get('format') as 'png' | 'jpeg' | null || 'png';
     
-    // Fetch project data
     const projectData = await CurseForgeAPI.getProject(projectId);
-    
-    // Generate image
+
     const imageBuffer = await generateCurseForgeImage(projectData, size, { format });
     
-    // Return the image with appropriate headers
     return new Response(imageBuffer, {
       headers: {
         'Content-Type': format === 'png' ? 'image/png' : 'image/jpeg',

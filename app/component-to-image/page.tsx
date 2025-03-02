@@ -5,24 +5,30 @@ import { getMockCurseForgeProject } from '../utils/mockData';
 import { CurseForgeEmbedImageSkeleton } from '../components/CurseForgeEmbedImageSkeleton';
 import { CurseForgeProject } from '../types/curseforge';
 
-// Define types for form state
+type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
+type ImageFormat = 'png' | 'jpeg';
+type ComponentSize = 'default' | 'small';
+
+interface ComponentProps {
+  data: CurseForgeProject;
+  size: ComponentSize;
+}
+
+interface ImageOptions {
+  format: ImageFormat;
+  quality: number;
+  width: number;
+  height: number;
+  deviceScaleFactor: number;
+}
+
 interface FormState {
-  componentName: string;
-  props: {
-    data: CurseForgeProject;
-    size: 'default' | 'small';
-  };
-  options: {
-    format: 'png' | 'jpeg';
-    quality: number;
-    width: number;
-    height: number;
-    deviceScaleFactor: number;
-  };
+  componentName: SupportedComponents;
+  props: ComponentProps;
+  options: ImageOptions;
 }
 
 export default function ComponentToImagePage() {
-  // Default form state
   const [formState, setFormState] = useState<FormState>({
     componentName: 'CurseForgeEmbedImageSkeleton',
     props: {
@@ -32,54 +38,45 @@ export default function ComponentToImagePage() {
     options: {
       format: 'png',
       quality: 90,
-      width: 1200,
+      width: 550,
       height: 800,
       deviceScaleFactor: 4,
     },
   });
   
-  // Additional states for UI
   const [isGenerating, setIsGenerating] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [previewJson, setPreviewJson] = useState('');
   const [error, setError] = useState<string | null>(null);
   
-  // Update JSON preview when form state changes
   useEffect(() => {
     setPreviewJson(JSON.stringify(formState.props, null, 2));
   }, [formState.props]);
   
-  // Parse and update props from JSON editor
   const updatePropsFromJson = (jsonString: string) => {
     try {
-      const parsedProps = JSON.parse(jsonString);
+      const parsedProps = JSON.parse(jsonString) as ComponentProps;
       setFormState((prev) => ({
         ...prev,
         props: parsedProps,
       }));
       setError(null);
     } catch (e) {
-      setError(`Invalid JSON: ${(e as Error).message}`);
+      setError(`Invalid JSON: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
   };
   
-  // Handle form field changes
-  const handleChange = (
-    section: keyof FormState,
-    field: string,
-    value: any
-  ) => {
+  const handleOptionsChange = (field: keyof ImageOptions, value: ImageOptions[keyof ImageOptions]) => {
     setFormState((prev) => ({
       ...prev,
-      [section]: {
-        ...(prev[section] as Record<string, any>),
+      options: {
+        ...prev.options,
         [field]: value,
       },
     }));
   };
   
-  // Handle prop changes for the CurseForge component
-  const handlePropChange = (field: string, value: any) => {
+  const handlePropChange = (field: keyof ComponentProps, value: ComponentProps[keyof ComponentProps]) => {
     setFormState((prev) => ({
       ...prev,
       props: {
@@ -89,7 +86,6 @@ export default function ComponentToImagePage() {
     }));
   };
   
-  // Generate the image
   const generateImage = async () => {
     setIsGenerating(true);
     setError(null);
@@ -108,18 +104,16 @@ export default function ComponentToImagePage() {
         throw new Error(errorData.error || 'Failed to generate image');
       }
       
-      // Create a blob URL for the image
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setImageUrl(url);
     } catch (e) {
-      setError(`Error generating image: ${(e as Error).message}`);
+      setError(`Error generating image: ${e instanceof Error ? e.message : 'Unknown error'}`);
     } finally {
       setIsGenerating(false);
     }
   };
   
-  // Download the generated image
   const downloadImage = () => {
     if (!imageUrl) return;
     
@@ -146,7 +140,7 @@ export default function ComponentToImagePage() {
               </label>
               <select 
                 value={formState.props.size}
-                onChange={(e) => handlePropChange('size', e.target.value)}
+                onChange={(e) => handlePropChange('size', e.target.value as ComponentSize)}
                 style={{ 
                   width: '100%', 
                   padding: '0.5rem',
@@ -189,7 +183,7 @@ export default function ComponentToImagePage() {
               </label>
               <select 
                 value={formState.options.format}
-                onChange={(e) => handleChange('options', 'format', e.target.value)}
+                onChange={(e) => handleOptionsChange('format', e.target.value as ImageFormat)}
                 style={{ 
                   width: '100%', 
                   padding: '0.5rem',
@@ -212,7 +206,7 @@ export default function ComponentToImagePage() {
                   min="10" 
                   max="100"
                   value={formState.options.quality}
-                  onChange={(e) => handleChange('options', 'quality', parseInt(e.target.value))}
+                  onChange={(e) => handleOptionsChange('quality', parseInt(e.target.value))}
                   style={{ width: '100%' }}
                 />
               </div>
@@ -228,7 +222,7 @@ export default function ComponentToImagePage() {
                 max="4" 
                 step="0.5"
                 value={formState.options.deviceScaleFactor}
-                onChange={(e) => handleChange('options', 'deviceScaleFactor', parseFloat(e.target.value))}
+                onChange={(e) => handleOptionsChange('deviceScaleFactor', parseFloat(e.target.value))}
                 style={{ width: '100%' }}
               />
             </div>
@@ -241,7 +235,7 @@ export default function ComponentToImagePage() {
                 <input 
                   type="number" 
                   value={formState.options.width}
-                  onChange={(e) => handleChange('options', 'width', parseInt(e.target.value))}
+                  onChange={(e) => handleOptionsChange('width', parseInt(e.target.value))}
                   style={{ 
                     width: '100%', 
                     padding: '0.5rem',
@@ -257,7 +251,7 @@ export default function ComponentToImagePage() {
                 <input 
                   type="number" 
                   value={formState.options.height}
-                  onChange={(e) => handleChange('options', 'height', parseInt(e.target.value))}
+                  onChange={(e) => handleOptionsChange('height', parseInt(e.target.value))}
                   style={{ 
                     width: '100%', 
                     padding: '0.5rem',

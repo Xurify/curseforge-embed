@@ -18,8 +18,6 @@ export function CurseForgeEmbedImageSkeleton({
         boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
         transition: "border-color 0.15s ease-in-out",
       }}
-      //onMouseOver={(e) => (e.currentTarget.style.borderColor = "#F16436")}
-      //onMouseOut={(e) => (e.currentTarget.style.borderColor = "#E5E3E0")}
     >
       <a
         href={data.urls.curseforge}
@@ -69,8 +67,6 @@ export function CurseForgeEmbedImageSkeleton({
                   marginTop: 0,
                   marginBottom: size === "small" ? "0.125rem" : "0.25rem",
                 }}
-                //onMouseOver={(e) => (e.currentTarget.style.color = "#F16436")}
-                //onMouseOut={(e) => (e.currentTarget.style.color = "#141414")}
                 className="component-title"
               >
                 {data.title}
@@ -177,14 +173,6 @@ export function CurseForgeEmbedImageSkeleton({
                     transition:
                       "background-color 0.15s ease-in-out, color 0.15s ease-in-out",
                   }}
-                //   onMouseOver={(e) => {
-                //     e.currentTarget.style.backgroundColor = "#F16436";
-                //     e.currentTarget.style.color = "white";
-                //   }}
-                //   onMouseOut={(e) => {
-                //     e.currentTarget.style.backgroundColor = "#F9F7F5";
-                //     e.currentTarget.style.color = "#6D7072";
-                //   }}
                 >
                   {category}
                 </span>

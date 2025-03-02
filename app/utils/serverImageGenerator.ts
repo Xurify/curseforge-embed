@@ -24,12 +24,10 @@ export async function generateComponentImage(
 ): Promise<Buffer> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL;
   
-  // Create a timeout promise
   const timeoutPromise = new Promise<never>((_, reject) => {
     setTimeout(() => reject(new Error('Image generation timed out')), VERCEL_TIMEOUT);
   });
-  
-  // Create the image generation promise
+
   const generatePromise = fetch(`${appUrl}/api/render-component`, {
     method: 'POST',
     headers: {
@@ -40,7 +38,6 @@ export async function generateComponentImage(
       props,
       options: {
         ...options,
-        // Ensure reasonable defaults for performance
         deviceScaleFactor: options.deviceScaleFactor || 1,
       },
     }),
@@ -52,7 +49,6 @@ export async function generateComponentImage(
     return Buffer.from(await response.arrayBuffer());
   });
   
-  // Race between the timeout and the generation
   return Promise.race([generatePromise, timeoutPromise]);
 }
 

@@ -1,23 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer, { Browser } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
+import { CurseForgeProject } from '@/app/types/curseforge';
 
-// Define the expected request body structure
-interface RenderComponentRequest {
-  componentName: string;
-  props: Record<string, any>;
-  options: {
-    format: 'png' | 'jpeg';
-    quality?: number;
-    width?: number;
-    height?: number;
-    deviceScaleFactor?: number;
+type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
+type ImageFormat = 'png' | 'jpeg';
+type ComponentProps = {
+  CurseForgeEmbedImageSkeleton: {
+    data: CurseForgeProject;
+    size?: 'default' | 'small';
   };
+};
+
+interface RenderOptions {
+  format: ImageFormat;
+  quality?: number;
+  width?: number;
+  height?: number;
+  deviceScaleFactor?: number;
+}
+
+interface RenderComponentRequest {
+  componentName: SupportedComponents;
+  props: ComponentProps[SupportedComponents];
+  options: RenderOptions;
 }
 
 let browser: Browser | null = null;
 
-// Helper to get or initialize the browser
-async function getBrowser() {
+async function getBrowser(): Promise<Browser> {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
       headless: true,
@@ -28,16 +38,16 @@ async function getBrowser() {
 }
 
 export async function POST(request: NextRequest) {
+  let page: Page | null = null;
+  
   try {
     const data = await request.json() as RenderComponentRequest;
     const { componentName, props, options } = data;
     
-    // Validate input
     if (!componentName) {
       return NextResponse.json({ error: 'Component name is required' }, { status: 400 });
     }
 
-    // Set defaults for options
     const {
       format = 'png',
       quality = 90,
@@ -49,19 +59,16 @@ export async function POST(request: NextRequest) {
     // Sanitize component name to prevent directory traversal
     const sanitizedComponentName = componentName.replace(/[^a-zA-Z0-9]/g, '');
     
-    // Get browser instance
     const browser = await getBrowser();
-    const page = await browser.newPage();
+    page = await browser.newPage();
     
     try {
-      // Set viewport with high DPI for better quality
       await page.setViewport({
         width,
         height,
         deviceScaleFactor,
       });
 
-      // Add extra CSS for sharper text rendering
       await page.addStyleTag({
         content: `
           * {
@@ -105,30 +112,24 @@ export async function POST(request: NextRequest) {
         `
       });
 
-      // Construct the URL for the render page with component details
       const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL);
       url.searchParams.set('component', sanitizedComponentName);
       url.searchParams.set('props', JSON.stringify(props));
       
-      // Navigate to the render page
       await page.goto(url.toString(), { waitUntil: 'networkidle0' });
       
-      // Extra wait to ensure everything is rendered
       await new Promise(resolve => setTimeout(resolve, 100));
       
-      // Select the component container
       const element = await page.$('#component-container');
       if (!element) {
         throw new Error('Component container not found');
       }
       
-      // Get bounding box for precise capture
       const boundingBox = await element.boundingBox();
       if (!boundingBox) {
         throw new Error('Could not determine component dimensions');
       }
 
-      // Take screenshot
       const screenshot = await element.screenshot({
         type: format,
         quality: format === 'jpeg' ? quality : undefined,
@@ -141,10 +142,9 @@ export async function POST(request: NextRequest) {
         }
       });
 
-      // Close the page
       await page.close();
+      page = null;
       
-      // Return the image with appropriate headers
       return new NextResponse(screenshot, {
         headers: {
           'Content-Type': format === 'png' ? 'image/png' : 'image/jpeg',
@@ -153,13 +153,23 @@ export async function POST(request: NextRequest) {
         },
       });
     } catch (err) {
-      await page.close();
+      if (page) {
+        await page.close();
+        page = null;
+      }
       throw err;
     }
   } catch (error) {
+    if (page) {
+      await page.close();
+      page = null;
+    }
     console.error('Error rendering component:', error);
     return NextResponse.json(
-      { error: 'Failed to render component', details: (error as Error).message },
+      { 
+        error: 'Failed to render component', 
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
