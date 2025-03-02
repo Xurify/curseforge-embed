@@ -12,7 +12,7 @@ export function CurseForgeEmbedSkeleton({
   return (
     <div className="border border-[#E5E3E0] bg-white rounded-lg overflow-hidden hover:border-[#F16436] transition-colors shadow-sm">
       <a
-        href={data.urls.curseforge}
+        href={data.thumbnail}
         target="_blank"
         rel="noopener noreferrer"
         className="block"

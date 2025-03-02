@@ -9,67 +9,106 @@ export function CurseForgeEmbedImageSkeleton({
   size?: "default" | "small";
 }) {
   return (
-    <div style={{
-      border: "1px solid #E5E3E0",
-      backgroundColor: "white",
-      borderRadius: "0.5rem",
-      overflow: "hidden",
-      boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-      transition: "border-color 0.15s ease-in-out"
-    }}
-    onMouseOver={(e) => e.currentTarget.style.borderColor = "#F16436"} 
-    onMouseOut={(e) => e.currentTarget.style.borderColor = "#E5E3E0"}>
+    <div
+      style={{
+        border: "1px solid #E5E3E0",
+        backgroundColor: "white",
+        borderRadius: "0.5rem",
+        overflow: "hidden",
+        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        transition: "border-color 0.15s ease-in-out",
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.borderColor = "#F16436")}
+      onMouseOut={(e) => (e.currentTarget.style.borderColor = "#E5E3E0")}
+    >
       <a
         href={data.urls.curseforge}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ display: "block" }}
+        style={{ display: "block", textDecoration: "none" }}
       >
         <div style={{ padding: size === "small" ? "0.75rem" : "1rem" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-            <div style={{
-              position: "relative",
-              flexShrink: 0,
-              width: size === "small" ? "3rem" : "4rem",
-              height: size === "small" ? "3rem" : "4rem"
-            }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.75rem",
+            }}
+            className="flex-gap"
+          >
+            <div
+              style={{
+                position: "relative",
+                flexShrink: 0,
+                width: size === "small" ? "3rem" : "4rem",
+                height: size === "small" ? "3rem" : "4rem",
+              }}
+            >
               <img
                 src={data.thumbnail}
                 alt={data.title}
                 sizes={size === "small" ? "48px" : "64px"}
-                style={{ objectFit: "cover", borderRadius: "0.375rem" }}
+                style={{
+                  objectFit: "cover",
+                  borderRadius: "0.375rem",
+                  width: size === "small" ? "48px" : "64px",
+                  height: size === "small" ? "48px" : "64px",
+                }}
               />
             </div>
             <div style={{ flexGrow: 1, minWidth: 0 }}>
-              <h2 style={{
-                fontWeight: "bold",
-                color: "#141414",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                fontSize: size === "small" ? "1rem" : "1.125rem",
-                transition: "color 0.15s ease-in-out"
-              }}
-              onMouseOver={(e) => e.currentTarget.style.color = "#F16436"}
-              onMouseOut={(e) => e.currentTarget.style.color = "#141414"}>
+              <h2
+                style={{
+                  fontWeight: "bold",
+                  color: "#141414",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  fontSize: size === "small" ? "1rem" : "1.125rem",
+                  transition: "color 0.15s ease-in-out",
+                  marginTop: 0,
+                  marginBottom: size === "small" ? "0.125rem" : "0.25rem",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.color = "#F16436")}
+                onMouseOut={(e) => (e.currentTarget.style.color = "#141414")}
+                className="component-title"
+              >
                 {data.title}
               </h2>
               {size === "default" && (
-                <p style={{ color: "#6D7072", fontSize: "0.875rem", marginBottom: "0.5rem" }}>{data.summary}</p>
+                <p
+                  style={{
+                    color: "#6D7072",
+                    fontSize: "0.875rem",
+                    marginBottom: "0.5rem",
+                    marginTop: 0,
+                  }}
+                  className="component-description"
+                >
+                  {data.summary}
+                </p>
               )}
-              <div style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: size === "small" ? "0.5rem" : "0.75rem",
-                fontSize: size === "small" ? "0.75rem" : "0.875rem",
-                color: "#6D7072"
-              }}>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: size === "small" ? "0.5rem" : "0.75rem",
+                  fontSize: size === "small" ? "0.75rem" : "0.875rem",
+                  color: "#6D7072",
+                }}
+              >
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
+                  }}
+                >
                   <svg
                     style={{
                       width: size === "small" ? "0.875rem" : "1rem",
                       height: size === "small" ? "0.875rem" : "1rem",
-                      color: "#F16436"
+                      color: "#F16436",
                     }}
                     fill="none"
                     stroke="currentColor"
@@ -84,12 +123,18 @@ export function CurseForgeEmbedImageSkeleton({
                   </svg>
                   {CurseForgeAPI.formatNumber(data.downloads.total)}
                 </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
+                  }}
+                >
                   <svg
                     style={{
                       width: size === "small" ? "0.875rem" : "1rem",
                       height: size === "small" ? "0.875rem" : "1rem",
-                      color: "#F16436"
+                      color: "#F16436",
                     }}
                     fill="none"
                     stroke="currentColor"
@@ -108,7 +153,14 @@ export function CurseForgeEmbedImageSkeleton({
             </div>
           </div>
           {size === "default" && (
-            <div style={{ marginTop: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.5rem",
+              }}
+            >
               {data.categories.map((category) => (
                 <span
                   key={category}
@@ -122,7 +174,8 @@ export function CurseForgeEmbedImageSkeleton({
                     borderRadius: "9999px",
                     fontSize: "0.75rem",
                     fontWeight: "500",
-                    transition: "background-color 0.15s ease-in-out, color 0.15s ease-in-out"
+                    transition:
+                      "background-color 0.15s ease-in-out, color 0.15s ease-in-out",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor = "#F16436";
@@ -139,11 +192,14 @@ export function CurseForgeEmbedImageSkeleton({
             </div>
           )}
         </div>
-        <div style={{ 
-          height: "0.25rem", 
-          width: "100%", 
-          background: "linear-gradient(to right, #F16436, rgba(241, 100, 54, 0.7))" 
-        }} />
+        <div
+          style={{
+            height: "0.25rem",
+            width: "100%",
+            background:
+              "linear-gradient(to right, #F16436, rgba(241, 100, 54, 0.7))",
+          }}
+        />
       </a>
     </div>
   );
