@@ -12,10 +12,11 @@ interface Params {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Params }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    const projectId = parseInt(params.id, 10);
+    const { id } = await params;
+    const projectId = parseInt(id, 10);
     
     if (isNaN(projectId)) {
       return new Response('Invalid project ID', { status: 400 });
