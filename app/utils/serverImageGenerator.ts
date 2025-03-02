@@ -1,7 +1,18 @@
 import { CurseForgeProject } from '../types/curseforge';
 
+type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
+type ImageFormat = 'png' | 'jpeg';
+type ComponentSize = 'default' | 'small';
+
+interface ComponentProps {
+  CurseForgeEmbedImageSkeleton: {
+    data: CurseForgeProject;
+    size?: ComponentSize;
+  };
+}
+
 interface GenerateImageOptions {
-  format?: 'png' | 'jpeg';
+  format?: ImageFormat;
   deviceScaleFactor?: number;
 }
 
@@ -17,12 +28,12 @@ const VERCEL_TIMEOUT = 9000; // Setting to 9s to allow for some buffer
  * - Removes filesystem operations
  * - Simplified options for better performance
  */
-export async function generateComponentImage(
-  componentName: string,
-  props: Record<string, any>,
+export async function generateComponentImage<T extends SupportedComponents>(
+  componentName: T,
+  props: ComponentProps[T],
   options: GenerateImageOptions = {}
 ): Promise<Buffer> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   
   const timeoutPromise = new Promise<never>((_, reject) => {
     setTimeout(() => reject(new Error('Image generation timed out')), VERCEL_TIMEOUT);
@@ -60,7 +71,7 @@ export async function generateComponentImage(
  */
 export async function generateCurseForgeImage(
   data: CurseForgeProject,
-  size: 'default' | 'small' = 'default',
+  size: ComponentSize = 'default',
   options: GenerateImageOptions = {}
 ): Promise<Buffer> {
   return generateComponentImage(
