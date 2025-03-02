@@ -1,131 +1,36 @@
-# React Component to Image Generator
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This Next.js application allows you to convert React components to images using Puppeteer. It provides a server-side API for rendering components as images and a client-side interface for customization.
+## Getting Started
 
-## Features
-
-- 🖼️ Convert React components to PNG or JPEG images
-- 🎛️ Customize component props through an intuitive UI
-- ⚙️ Control image format, dimensions, and quality
-- 📥 View and download generated images
-- 📱 Responsive design that works across devices
-- 🔍 High-DPI image support for retina displays
-
-## Prerequisites
-
-- Node.js 18+ (LTS recommended)
-- npm or yarn
-
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd curseforge-embed
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Create a `.env.local` file in the project root with the following contents:
-
-```
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
-
-## Development
-
-Run the development server:
+First, run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-```
-
-Open [http://localhost:3000/component-to-image](http://localhost:3000/component-to-image) in your browser to access the component-to-image generator.
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
 # or
-yarn build
-```
-
-Start the production server:
-
-```bash
-npm run start
+pnpm dev
 # or
-yarn start
+bun dev
 ```
 
-## API Usage
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Rendering a Component as an Image
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```typescript
-// Example API request
-const response = await fetch('/api/render-component', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    componentName: 'CurseForgeEmbedImageSkeleton',
-    props: {
-      data: {
-        /* Your CurseForge project data */
-      },
-      size: 'default', // or 'small'
-    },
-    options: {
-      format: 'png', // or 'jpeg'
-      quality: 90, // for JPEG only
-      width: 800, 
-      height: 600,
-      deviceScaleFactor: 2, // for high-DPI images
-    },
-  }),
-});
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-// The response will be the image in the requested format
-const imageBlob = await response.blob();
-```
+## Learn More
 
-## Serverless Deployment Considerations
+To learn more about Next.js, take a look at the following resources:
 
-When deploying to serverless environments (Vercel, Netlify, etc.), keep in mind:
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-1. **Cold Start Times**: Puppeteer initialization can take time, which may lead to longer cold start times.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-2. **Memory Limits**: Serverless functions often have memory limits (e.g., 1GB on Vercel). Rendering large or complex components may hit these limits.
+## Deploy on Vercel
 
-3. **Execution Timeouts**: Consider that the rendering process might exceed the timeout limits of some serverless platforms (typically 10-60 seconds).
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-4. **Puppeteer Configuration**: You may need to configure Puppeteer differently for specific platforms. Refer to:
-   - [Puppeteer on Vercel](https://github.com/vercel/vercel/tree/main/examples/puppeteer)
-   - [Puppeteer with AWS Lambda](https://github.com/puppeteer/puppeteer/blob/main/docs/browsers-api.md)
-
-5. **Caching**: Implement caching strategies to avoid re-rendering the same components with the same props.
-
-## Adding New Components
-
-To add new components to the generator:
-
-1. Add your component to the `componentRegistry` in `app/api/render-page/route.tsx`.
-2. Update the client-side page to include options specific to your component.
-3. Ensure your component is compatible with server-side rendering.
-
-## License
-
-MIT
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

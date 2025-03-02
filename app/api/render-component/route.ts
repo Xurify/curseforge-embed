@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
     const {
       format = 'png',
       quality = 90,
-      width = 1200,
-      height = 800,
+      width = 600,
+      height = 700,
       deviceScaleFactor = 4,
     } = options || {};
 
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Construct the URL for the render page with component details
-      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
+      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL);
       url.searchParams.set('component', sanitizedComponentName);
       url.searchParams.set('props', JSON.stringify(props));
       
