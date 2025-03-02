@@ -3,6 +3,7 @@ import { CurseForgeProject } from '../types/curseforge';
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
 type ComponentSize = 'default' | 'small';
+type ViewportPreset = 'desktop' | 'mobile' | 'tablet';
 
 interface ComponentProps {
   CurseForgeEmbedImageSkeleton: {
@@ -14,7 +15,21 @@ interface ComponentProps {
 interface GenerateImageOptions {
   format?: ImageFormat;
   deviceScaleFactor?: number;
+  quality?: number; // JPEG quality (1-100)
+  viewport?: ViewportPreset;
+  customViewport?: {
+    width: number;
+    height: number;
+  };
 }
+
+// Default options for high-quality image generation
+const DEFAULT_OPTIONS: Required<Omit<GenerateImageOptions, 'customViewport'>> = {
+  format: 'png',
+  deviceScaleFactor: 4, // Increased for sharper rendering
+  quality: 100, // Maximum quality for JPEG
+  viewport: 'desktop',
+};
 
 // Vercel Hobby plan timeout (10 seconds)
 const VERCEL_TIMEOUT = 9000; // Setting to 9s to allow for some buffer
@@ -26,14 +41,21 @@ const VERCEL_TIMEOUT = 9000; // Setting to 9s to allow for some buffer
  * Note: This is optimized for Vercel deployment:
  * - Includes timeout handling for Vercel's limits
  * - Removes filesystem operations
- * - Simplified options for better performance
+ * - Uses high-quality rendering settings
+ * - Supports mobile and tablet viewports
  */
 export async function generateComponentImage<T extends SupportedComponents>(
   componentName: T,
   props: ComponentProps[T],
-  options: GenerateImageOptions = {}
+  options: Partial<GenerateImageOptions> = {}
 ): Promise<Buffer> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  
+  // Merge with default options
+  const finalOptions: Required<Omit<GenerateImageOptions, 'customViewport'>> & Pick<GenerateImageOptions, 'customViewport'> = {
+    ...DEFAULT_OPTIONS,
+    ...options,
+  };
   
   const timeoutPromise = new Promise<never>((_, reject) => {
     setTimeout(() => reject(new Error('Image generation timed out')), VERCEL_TIMEOUT);
@@ -47,10 +69,7 @@ export async function generateComponentImage<T extends SupportedComponents>(
     body: JSON.stringify({
       componentName,
       props,
-      options: {
-        ...options,
-        deviceScaleFactor: options.deviceScaleFactor || 1,
-      },
+      options: finalOptions,
     }),
   }).then(async (response) => {
     if (!response.ok) {
@@ -67,19 +86,38 @@ export async function generateComponentImage<T extends SupportedComponents>(
  * Generate a CurseForge component image 
  * This is a convenience wrapper for the specific component
  * 
- * Note: This is optimized for direct API usage and avoids filesystem operations
+ * Note: This is optimized for high-quality image generation
  */
 export async function generateCurseForgeImage(
   data: CurseForgeProject,
   size: ComponentSize = 'default',
-  options: GenerateImageOptions = {}
+  options: Partial<GenerateImageOptions> = {}
 ): Promise<Buffer> {
   return generateComponentImage(
     'CurseForgeEmbedImageSkeleton',
     { data, size },
     {
-      format: 'png',
-      deviceScaleFactor: 1,
+      ...DEFAULT_OPTIONS,
+      ...options,
+    }
+  );
+}
+
+/**
+ * Generate a mobile-optimized CurseForge component image
+ * This is a convenience wrapper that uses mobile viewport settings
+ */
+export async function generateCurseForgeMobileImage(
+  data: CurseForgeProject,
+  size: ComponentSize = 'small',
+  options: Partial<GenerateImageOptions> = {}
+): Promise<Buffer> {
+  return generateComponentImage(
+    'CurseForgeEmbedImageSkeleton',
+    { data, size },
+    {
+      ...DEFAULT_OPTIONS,
+      viewport: 'mobile',
       ...options,
     }
   );

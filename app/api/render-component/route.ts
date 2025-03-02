@@ -4,19 +4,31 @@ import { CurseForgeProject } from '@/app/types/curseforge';
 
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
-type ComponentProps = {
+type ViewportPreset = 'desktop' | 'mobile' | 'tablet';
+
+// Common device viewport presets with constrained widths
+const VIEWPORT_PRESETS: Record<ViewportPreset, { width: number; height: number }> = {
+  desktop: { width: 600, height: 800 }, // Reduced from 1200 for better proportions
+  mobile: { width: 320, height: 640 }, // Standard mobile width
+  tablet: { width: 480, height: 800 }, // Narrower tablet width for embeds
+};
+
+interface ComponentProps {
   CurseForgeEmbedImageSkeleton: {
     data: CurseForgeProject;
     size?: 'default' | 'small';
   };
-};
+}
 
 interface RenderOptions {
   format: ImageFormat;
   quality?: number;
-  width?: number;
-  height?: number;
-  deviceScaleFactor?: number;
+  deviceScaleFactor: number;
+  viewport?: ViewportPreset;
+  customViewport?: {
+    width: number;
+    height: number;
+  };
 }
 
 interface RenderComponentRequest {
@@ -27,11 +39,18 @@ interface RenderComponentRequest {
 
 let browser: Browser | null = null;
 
+// Helper to get or initialize the browser with high-quality settings
 async function getBrowser(): Promise<Browser> {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--font-render-hinting=none',
+        '--disable-gpu-vsync',
+      ],
+      defaultViewport: null,
     });
   }
   return browser;
@@ -50,13 +69,15 @@ export async function POST(request: NextRequest) {
 
     const {
       format = 'png',
-      quality = 90,
-      width = 600,
-      height = 700,
+      quality = 100,
       deviceScaleFactor = 4,
+      viewport = 'desktop',
+      customViewport,
     } = options || {};
 
-    // Sanitize component name to prevent directory traversal
+    // Get viewport dimensions
+    const viewportDimensions = customViewport || VIEWPORT_PRESETS[viewport];
+
     const sanitizedComponentName = componentName.replace(/[^a-zA-Z0-9]/g, '');
     
     const browser = await getBrowser();
@@ -64,9 +85,10 @@ export async function POST(request: NextRequest) {
     
     try {
       await page.setViewport({
-        width,
-        height,
+        ...viewportDimensions,
         deviceScaleFactor,
+        isMobile: viewport === 'mobile',
+        hasTouch: viewport === 'mobile' || viewport === 'tablet',
       });
 
       await page.addStyleTag({
@@ -76,26 +98,47 @@ export async function POST(request: NextRequest) {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            font-smooth: always;
+          }
+          
+          @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            * {
+              -webkit-font-smoothing: subpixel-antialiased;
+            }
           }
           
           body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+          }
+          
+          #component-container {
+            width: 100%;
+            max-width: ${viewport === 'mobile' ? '320px' : viewport === 'tablet' ? '480px' : '600px'};
+            margin: 0 auto;
+            padding: ${viewport === 'mobile' ? '0.5rem' : '1rem'};
           }
           
           h2 {
             margin: 0 0 0.25rem 0;
             line-height: 1.2;
-            font-size: 1.125rem;
+            font-size: ${viewport === 'mobile' ? '0.875rem' : '1rem'};
           }
           
           p {
             margin: 0 0 0.5rem 0;
             line-height: 1.5;
+            font-size: ${viewport === 'mobile' ? '0.75rem' : '0.875rem'};
           }
           
           .flex-gap {
-            gap: 0.75rem !important;
+            gap: ${viewport === 'mobile' ? '0.5rem' : '0.75rem'} !important;
           }
           
           .component-title {
@@ -109,16 +152,38 @@ export async function POST(request: NextRequest) {
             margin-bottom: 0.5rem !important;
             padding: 0 !important;
           }
+
+          img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+          }
+
+          @media (max-width: 480px) {
+            body {
+              font-size: 14px;
+            }
+            
+            h2 {
+              font-size: 0.875rem;
+            }
+            
+            p {
+              font-size: 0.75rem;
+            }
+          }
         `
       });
 
-      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL);
+      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
       url.searchParams.set('component', sanitizedComponentName);
       url.searchParams.set('props', JSON.stringify(props));
       
-      await page.goto(url.toString(), { waitUntil: 'networkidle0' });
+      await page.goto(url.toString(), { 
+        waitUntil: ['networkidle0', 'load', 'domcontentloaded'],
+        timeout: 8000,
+      });
       
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       const element = await page.$('#component-container');
       if (!element) {
@@ -130,6 +195,7 @@ export async function POST(request: NextRequest) {
         throw new Error('Could not determine component dimensions');
       }
 
+      // Take screenshot with high-quality settings
       const screenshot = await element.screenshot({
         type: format,
         quality: format === 'jpeg' ? quality : undefined,
@@ -150,6 +216,9 @@ export async function POST(request: NextRequest) {
           'Content-Type': format === 'png' ? 'image/png' : 'image/jpeg',
           'Content-Disposition': `inline; filename="component.${format}"`,
           'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+          'X-Image-Quality': `${deviceScaleFactor}x`,
+          'X-Viewport': viewport,
+          'X-Viewport-Size': `${viewportDimensions.width}x${viewportDimensions.height}`,
         },
       });
     } catch (err) {
