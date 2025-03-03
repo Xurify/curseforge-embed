@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from 'puppeteer-core';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { NextRequest } from 'next/server';
 import { CurseForgeProject } from '@/app/types/curseforge';
 
