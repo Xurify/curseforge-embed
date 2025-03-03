@@ -1,17 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { NextRequest } from 'next/server';
 import { CurseForgeProject } from '@/app/types/curseforge';
 
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
 type ViewportPreset = 'desktop' | 'mobile' | 'tablet';
-
-// Common device viewport presets with constrained widths
-const VIEWPORT_PRESETS: Record<ViewportPreset, { width: number; height: number }> = {
-  desktop: { width: 600, height: 800 }, // Reduced from 1200 for better proportions
-  mobile: { width: 320, height: 640 }, // Standard mobile width
-  tablet: { width: 480, height: 800 }, // Narrower tablet width for embeds
-};
 
 interface ComponentProps {
   CurseForgeEmbedImageSkeleton: {
@@ -21,9 +14,9 @@ interface ComponentProps {
 }
 
 interface RenderOptions {
-  format: ImageFormat;
+  format?: ImageFormat;
   quality?: number;
-  deviceScaleFactor: number;
+  deviceScaleFactor?: number;
   viewport?: ViewportPreset;
   customViewport?: {
     width: number;
@@ -34,7 +27,7 @@ interface RenderOptions {
 interface RenderComponentRequest {
   componentName: SupportedComponents;
   props: ComponentProps[SupportedComponents];
-  options: RenderOptions;
+  options?: RenderOptions;
 }
 
 let browser: Browser | null = null;
@@ -61,10 +54,10 @@ export async function POST(request: NextRequest) {
   
   try {
     const data = await request.json() as RenderComponentRequest;
-    const { componentName, props, options } = data;
+    const { componentName, props, options = {} } = data;
     
     if (!componentName) {
-      return NextResponse.json({ error: 'Component name is required' }, { status: 400 });
+      return new Response('Component name is required', { status: 400 });
     }
 
     const {
@@ -73,10 +66,13 @@ export async function POST(request: NextRequest) {
       deviceScaleFactor = 4,
       viewport = 'desktop',
       customViewport,
-    } = options || {};
+    } = options;
 
     // Get viewport dimensions
-    const viewportDimensions = customViewport || VIEWPORT_PRESETS[viewport];
+    const viewportDimensions = customViewport || {
+      width: 600,
+      height: 135
+    };
 
     const sanitizedComponentName = componentName.replace(/[^a-zA-Z0-9]/g, '');
     
@@ -120,9 +116,7 @@ export async function POST(request: NextRequest) {
           
           #component-container {
             width: 100%;
-            max-width: ${viewport === 'mobile' ? '320px' : viewport === 'tablet' ? '480px' : '600px'};
-            margin: 0 auto;
-            padding: ${viewport === 'mobile' ? '0.5rem' : '1rem'};
+            padding: 0;
           }
           
           h2 {
@@ -211,7 +205,7 @@ export async function POST(request: NextRequest) {
       await page.close();
       page = null;
       
-      return new NextResponse(screenshot, {
+      return new Response(screenshot, {
         headers: {
           'Content-Type': format === 'png' ? 'image/png' : 'image/jpeg',
           'Content-Disposition': `inline; filename="component.${format}"`,
@@ -234,11 +228,8 @@ export async function POST(request: NextRequest) {
       page = null;
     }
     console.error('Error rendering component:', error);
-    return NextResponse.json(
-      { 
-        error: 'Failed to render component', 
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+    return new Response(
+      `Failed to render component: ${error instanceof Error ? error.message : 'Unknown error'}`,
       { status: 500 }
     );
   }
