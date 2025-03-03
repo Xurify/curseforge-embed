@@ -91,7 +91,7 @@ export default function ComponentToImagePage() {
     setError(null);
     
     try {
-      const response = await fetch('/api/render-component', {
+      const response = await fetch('/api/render-component/og', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
