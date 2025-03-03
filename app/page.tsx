@@ -1,5 +1,6 @@
 import CurseForgeEmbed from './components/CurseForgeEmbed';
 import ClientCurseForgeEmbed from './components/ClientCurseForgeEmbed';
+import CurseForgeBadge from './components/CurseForgeBadge';
 
 export default function Home() {
   // TODO: Remove later - Example project IDs from CurseForge
@@ -24,6 +25,81 @@ export default function Home() {
         </p>
         
         <div className="space-y-12">
+          <section>
+            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">Project Badge</h2>
+            <p className="text-[#6D7072] mb-6">
+              A compact badge that shows key project information in a single line.
+              Available as both a React component and a static image.
+            </p>
+            
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-medium mb-4 text-[#141414]">Examples</h3>
+                <div className="grid gap-8 md:grid-cols-2">
+                  <div>
+                    <h4 className="text-base font-medium mb-2 text-[#141414] flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      React Component
+                    </h4>
+                    <div className="space-y-4">
+                      <CurseForgeBadge projectId={projectIds.jeiJustEnoughItems} />
+                      <CurseForgeBadge projectId={projectIds.waystones} />
+                      <CurseForgeBadge projectId={projectIds.elytraAssistant} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-base font-medium mb-2 text-[#141414] flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4 4m0 0l4-4m-4 4V4" />
+                      </svg>
+                      Static Image
+                    </h4>
+                    <div className="space-y-4">
+                      <img 
+                        src={`/api/badge/${projectIds.jeiJustEnoughItems}?theme=dark`}
+                        alt="JEI - Just Enough Items"
+                        width="208"
+                        height="58"
+                      />
+                      <img 
+                        src={`/api/badge/${projectIds.waystones}?theme=dark`}
+                        alt="Waystones"
+                        width="208"
+                        height="58"
+                      />
+                      <img 
+                        src={`/api/badge/${projectIds.elytraAssistant}?theme=dark`}
+                        alt="Elytra Assistant"
+                        width="208"
+                        height="58"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
+                  <pre className="text-sm">
+                    <code>{`// React Component
+import CurseForgeBadge from './components/CurseForgeBadge';
+
+<CurseForgeBadge projectId="238222" />
+
+// Static Image
+<img 
+  src="/api/badge/238222?theme=dark"
+  alt="CurseForge Project"
+  width="208"
+  height="58"
+/>`}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section>
             <h2 className="text-2xl font-semibold mb-2 text-[#141414]">Component Sizes</h2>
             <p className="text-[#6D7072] mb-6">
