@@ -3,6 +3,7 @@ import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 import { ReactElement } from 'react';
 import { CurseForgeProject } from '@/app/types/curseforge';
+import { CurseForgeAPI } from '@/app/lib/curseforge-api';
 
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
@@ -150,7 +151,7 @@ export async function POST(request: NextRequest) {
                     >
                       <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    {projectData.downloads.total.toLocaleString()}
+                    {CurseForgeAPI.formatNumber(projectData.downloads.total)}
                   </div>
                   <div style={{ 
                     display: 'flex',
@@ -169,7 +170,7 @@ export async function POST(request: NextRequest) {
                     >
                       <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    {new Date(projectData.download.uploaded_at).toLocaleDateString()}
+                    {CurseForgeAPI.formatDate(projectData.download.uploaded_at)}
                   </div>
                 </div>
               </div>

@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
         `
       });
 
-      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
+      const url = new URL('/api/render-page', process.env.NEXT_PUBLIC_APP_URL);
       url.searchParams.set('component', sanitizedComponentName);
       url.searchParams.set('props', JSON.stringify(props));
       
