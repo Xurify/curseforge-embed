@@ -113,6 +113,65 @@ function MyComponent() {
               </pre>
             </div>
           </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">Server-Generated Images</h2>
+            <p className="text-[#6D7072] mb-6">
+              Generate static images of your CurseForge embeds for use in places where JavaScript isn't available or desired.
+            </p>
+            
+            <div className="grid gap-8 md:grid-cols-2">
+              <div>
+                <h3 className="text-xl font-medium mb-4 text-[#141414]">Default Size (PNG)</h3>
+                <div className="border border-gray-200 rounded-lg overflow-hidden max-w-2xl">
+                  <img
+                    src="/api/generate-image/238222?size=default&format=png"
+                    alt="API-generated component (default size)"
+                    className="w-full"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-[#6D7072]">
+                  URL: <code>/api/generate-image/238222?size=default&format=png</code>
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-medium mb-4 text-[#141414]">Small Size (JPEG)</h3>
+                <div className="border border-gray-200 rounded-lg overflow-hidden max-w-xl">
+                  <img
+                    src="/api/generate-image/238222?size=small&format=jpeg"
+                    alt="API-generated component (small size)"
+                    className="w-full"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-[#6D7072]">
+                  URL: <code>/api/generate-image/238222?size=small&format=jpeg</code>
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
+              <pre className="text-sm">
+                <code>{`// Direct image usage in HTML
+<img 
+  src="/api/generate-image/238222?size=default&format=png"
+  alt="CurseForge Project"
+/>
+
+// Programmatic usage
+const response = await fetch(
+  '/api/generate-image/238222?size=default&format=png'
+);
+const imageBlob = await response.blob();
+
+// With additional options
+const url = new URL('/api/generate-image/238222', window.location.origin);
+url.searchParams.set('size', 'small');
+url.searchParams.set('format', 'jpeg');
+const response = await fetch(url);`}</code>
+              </pre>
+            </div>
+          </section>
         </div>
       </div>
     </main>
