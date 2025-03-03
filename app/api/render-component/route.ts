@@ -2,6 +2,8 @@ import puppeteer, { Browser, Page } from 'puppeteer';
 import { NextRequest } from 'next/server';
 import { CurseForgeProject } from '@/app/types/curseforge';
 
+export const runtime = 'edge';
+
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
 type ViewportPreset = 'desktop' | 'mobile' | 'tablet';

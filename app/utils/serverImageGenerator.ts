@@ -61,7 +61,7 @@ export async function generateComponentImage<T extends SupportedComponents>(
     setTimeout(() => reject(new Error('Image generation timed out')), VERCEL_TIMEOUT);
   });
 
-  const generatePromise = fetch(`${appUrl}/api/render-component/og`, {
+  const generatePromise = fetch(`${appUrl}/api/render-component`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
