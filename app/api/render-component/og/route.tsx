@@ -7,14 +7,9 @@ import { CurseForgeAPI } from '@/app/lib/curseforge-api';
 
 type SupportedComponents = 'CurseForgeEmbedImageSkeleton';
 type ImageFormat = 'png' | 'jpeg';
-type ViewportPreset = 'desktop' | 'mobile' | 'tablet';
 
 // Common device viewport presets with constrained widths
-const VIEWPORT_PRESETS = {
-  desktop: { width: 600, height: 135 },
-  mobile: { width: 320, height: 160 },
-  tablet: { width: 480, height: 170 },
-} as const;
+const VIEWPORT_PRESETS = { width: 300, height: 137 } as const;
 
 interface ComponentProps {
   CurseForgeEmbedImageSkeleton: {
@@ -26,7 +21,6 @@ interface ComponentProps {
 interface RenderOptions {
   format?: ImageFormat;
   quality?: number;
-  viewport?: ViewportPreset;
   customViewport?: {
     width: number;
     height: number;
@@ -52,15 +46,14 @@ export async function POST(request: NextRequest) {
 
     const {
       format = 'png',
-      viewport = 'desktop',
       customViewport,
     } = options;
 
     // Get viewport dimensions
     const { data: projectData, size = 'default' } = props;
     const viewportDimensions = customViewport || {
-      width: VIEWPORT_PRESETS[viewport].width,
-      height: size === 'small' ? 100 : VIEWPORT_PRESETS[viewport].height
+      width: VIEWPORT_PRESETS.width,
+      height: size === 'small' ? 100 : VIEWPORT_PRESETS.height
     };
 
     // Render the CurseForge component
@@ -91,8 +84,8 @@ export async function POST(request: NextRequest) {
               <img
                 src={projectData.thumbnail}
                 alt={projectData.title}
-                width={size === 'small' ? 48 : 64}
-                height={size === 'small' ? 48 : 64}
+                width={size === 'small' ? 48 : 72}
+                height={size === 'small' ? 48 : 72}
                 style={{
                   borderRadius: '6px',
                 }}
@@ -114,53 +107,23 @@ export async function POST(request: NextRequest) {
                 >
                   {projectData.title}
                 </h2>
-                {size === 'default' && (
-                  <p
-                    style={{
-                      margin: '0',
-                      fontSize: '14px',
-                      color: '#6D7072',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {projectData.summary}
-                  </p>
-                )}
                 <div
                   style={{
                     display: 'flex',
-                    gap: size === 'small' ? '8px' : '12px',
-                    fontSize: size === 'small' ? '12px' : '14px',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    fontSize: size === 'small' ? '13px' : '15px',
                     color: '#6D7072',
                   }}
                 >
                   <div style={{ 
                     display: 'flex',
                     alignItems: 'center', 
-                    gap: '6px' 
+                    gap: '8px' 
                   }}>
                     <svg
-                      width={size === 'small' ? 14 : 16}
-                      height={size === 'small' ? 14 : 16}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#F16436"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    {CurseForgeAPI.formatNumber(projectData.downloads.total)}
-                  </div>
-                  <div style={{ 
-                    display: 'flex',
-                    alignItems: 'center', 
-                    gap: '6px' 
-                  }}>
-                    <svg
-                      width={size === 'small' ? 14 : 16}
-                      height={size === 'small' ? 14 : 16}
+                      width={size === 'small' ? 16 : 18}
+                      height={size === 'small' ? 16 : 18}
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="#F16436"
@@ -171,6 +134,25 @@ export async function POST(request: NextRequest) {
                       <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     {CurseForgeAPI.formatDate(projectData.download.uploaded_at)}
+                  </div>
+                  <div style={{ 
+                    display: 'flex',
+                    alignItems: 'center', 
+                    gap: '8px' 
+                  }}>
+                    <svg
+                      width={size === 'small' ? 16 : 18}
+                      height={size === 'small' ? 16 : 18}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#F16436"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    {CurseForgeAPI.formatNumber(projectData.downloads.total)}
                   </div>
                 </div>
               </div>
