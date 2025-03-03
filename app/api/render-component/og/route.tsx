@@ -61,7 +61,6 @@ export async function POST(request: NextRequest) {
       width: VIEWPORT_PRESETS[viewport].width,
       height: size === 'small' ? 100 : VIEWPORT_PRESETS[viewport].height
     };
-    const { width, height } = viewportDimensions;
 
     // Render the CurseForge component
     if (componentName === 'CurseForgeEmbedImageSkeleton') {
