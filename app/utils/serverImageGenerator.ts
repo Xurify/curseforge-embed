@@ -49,7 +49,7 @@ export async function generateComponentImage<T extends SupportedComponents>(
   props: ComponentProps[T],
   options: Partial<GenerateImageOptions> = {}
 ): Promise<Buffer> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
   
   // Merge with default options
   const finalOptions: Required<Omit<GenerateImageOptions, 'customViewport'>> & Pick<GenerateImageOptions, 'customViewport'> = {
