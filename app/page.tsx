@@ -117,7 +117,7 @@ function MyComponent() {
           <section>
             <h2 className="text-2xl font-semibold mb-2 text-[#141414]">Server-Generated Images</h2>
             <p className="text-[#6D7072] mb-6">
-              Generate static images of your CurseForge embeds for use in places where JavaScript isn't available or desired.
+              Generate static images of your CurseForge embeds for use in places where JavaScript isn&apos;t available or desired.
             </p>
             
             <div className="grid gap-8 md:grid-cols-2">
