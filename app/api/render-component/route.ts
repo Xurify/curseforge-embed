@@ -1,5 +1,4 @@
 import puppeteer, { Browser, Page } from 'puppeteer-core';
-import chrome from '@sparticuz/chromium';
 import { NextRequest } from 'next/server';
 import { CurseForgeProject } from '@/app/types/curseforge';
 
