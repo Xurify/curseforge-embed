@@ -1,4 +1,4 @@
-import { CurseForgeProject } from '../types/curseforge';
+import { CurseForgeProject } from '../../types/curseforge';
 
 /**
  * Generate mock CurseForge project data for testing
