@@ -231,7 +231,9 @@ export async function GET(
           weight: 700,
         },
       ],
+      headers: {
+        "Cache-Control": "public, immutable, no-transform, max-age=3600",
+      },
     }
   );
 }
-
