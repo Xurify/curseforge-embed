@@ -80,7 +80,7 @@ export async function GET(
             justifyContent: "center",
             width: "110px",
             height: "110px",
-            background: "linear-gradient(180deg, #80B1E8 0%, #5E8FBF 100%)",
+            background: "linear-gradient(180deg, #EB622B 0%, #D44A1A 100%)",
             borderRadius: "8px",
             marginRight: "16px",
             overflow: "hidden",
