@@ -32,6 +32,20 @@ function formatNumber(num: number): string {
   }
 }
 
+function getCacheDuration(downloads: number): number {
+  if (downloads >= 1000000) {
+    return 604800; // 1 week
+  } else if (downloads >= 100000) {
+    return 86400; // 1 day
+  } else if (downloads >= 10000) {
+    return 7200; // 2 hours
+  } else if (downloads >= 1000) {
+    return 3600; // 1 hour
+  } else {
+    return 3600; // 1 hour
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ projectId: string }> }
@@ -56,6 +70,7 @@ export async function GET(
   const logoUrl = data.thumbnail || "";
 
   const formattedDownloads = formatNumber(parseInt(downloads, 10));
+  const cacheDuration = getCacheDuration(parseInt(downloads, 10));
 
   return new ImageResponse(
     (
@@ -232,7 +247,7 @@ export async function GET(
         },
       ],
       headers: {
-        "Cache-Control": "public, immutable, no-transform, max-age=3600",
+        "Cache-Control": `public, immutable, no-transform, max-age=${cacheDuration}`,
       },
     }
   );
