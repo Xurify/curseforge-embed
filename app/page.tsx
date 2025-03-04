@@ -34,7 +34,6 @@ export default function Home() {
             
             <div className="space-y-8">
               <div>
-                <h3 className="text-xl font-medium mb-4 text-[#141414]">Examples</h3>
                 <div className="grid gap-8 md:grid-cols-2">
                   <div>
                     <h4 className="text-base font-medium mb-2 text-[#141414] flex items-center gap-2">
