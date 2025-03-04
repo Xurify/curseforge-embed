@@ -1,4 +1,3 @@
-/** @jsxImportSource react */
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 import { ReactElement } from 'react';
