@@ -61,7 +61,7 @@ export async function GET(
           alignItems: "center",
           justifyContent: "flex-start",
           background: theme === "dark" ? "#2D2D2D" : "#F8F9F9",
-          border: `2px solid ${theme === "dark" ? "#404040" : "#E3E6E8"}`,
+          border: `3px solid ${theme === "dark" ? "#404040" : "#E3E6E8"}`,
           borderRadius: "8px",
           padding: "16px 24px",
           color: theme === "dark" ? "#E1E3E5" : "#242729",
