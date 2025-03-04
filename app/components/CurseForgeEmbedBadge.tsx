@@ -8,7 +8,7 @@ export function CurseForgeEmbedBadge({
   data: CurseForgeProject;
 }) {
   return (
-    <div className="h-[52px] bg-[#2D2D2D] rounded overflow-hidden">
+    <div className="h-[56px] bg-[#2D2D2D] rounded overflow-hidden">
       <a
         href={data.urls.curseforge}
         target="_blank"
