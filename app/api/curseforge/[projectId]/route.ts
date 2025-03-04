@@ -14,11 +14,7 @@ export async function GET(
 
   try {
     const baseUrl = "https://api.cfwidget.com";
-    const externalResponse = await fetch(`${baseUrl}/${projectId}`, {
-      next: {
-        revalidate,
-      },
-    });
+    const externalResponse = await fetch(`${baseUrl}/${projectId}`);
 
     if (!externalResponse.ok) {
       throw new Error(
