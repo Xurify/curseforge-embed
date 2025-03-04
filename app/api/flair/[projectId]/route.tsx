@@ -53,7 +53,7 @@ export async function GET(
 
   const modName = data.title;
   const downloads = data.downloads.total.toString();
-  const loader = Object.keys(data.versions || {}).find((v: string) => v.includes("Fabric") || v.includes("Forge")) || "Unknown";
+  const author = data.members.find((member) => member.title === "Owner")?.username;
   const logoUrl = data.thumbnail || "";
 
   const formattedDownloads = formatNumber(parseInt(downloads, 10));
@@ -67,13 +67,13 @@ export async function GET(
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-start",
-          background: theme === "dark" ? "#212121" : "#F8F9F9",
-          border: `1px solid ${theme === "dark" ? "#333333" : "#E3E6E8"}`,
+          background: theme === "dark" ? "#1E1E1E" : "#F8F9F9",
+          border: `2px solid ${theme === "dark" ? "#333333" : "#E3E6E8"}`,
           borderRadius: "8px",
-          padding: "16px",
+          padding: "16px 24px",
           color: theme === "dark" ? "#E1E3E5" : "#242729",
           fontFamily: '"Noto Sans", sans-serif',
-          boxShadow: theme === "dark" ? "0 1px 3px rgba(0,0,0,0.2)" : "0 1px 2px rgba(0,0,0,0.05)",
+          boxShadow: theme === "dark" ? "0 1px 3px rgba(0,0,0,0.15)" : "0 1px 2px rgba(0,0,0,0.05)",
         }}
       >
         {/* Logo/Icon */}
@@ -82,8 +82,8 @@ export async function GET(
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "120px",
-            height: "120px",
+            width: "110px",
+            height: "110px",
             background: "linear-gradient(180deg, #80B1E8 0%, #5E8FBF 100%)",
             borderRadius: "8px",
             marginRight: "16px",
@@ -131,12 +131,12 @@ export async function GET(
           <div
             style={{
               fontSize: "36px",
-              fontWeight: 800,
+              fontWeight: 600,
               color: theme === "dark" ? "#FFFFFF" : "#242729",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              marginBottom: "16px",
+              marginBottom: "12px",
               letterSpacing: "-0.1px",
             }}
           >
@@ -148,9 +148,10 @@ export async function GET(
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "32px",
+              gap: "24px",
               color: theme === "dark" ? "#9BA0A4" : "#6A737C",
               fontSize: "28px",
+              fontWeight: 400,
             }}
           >
             {/* Downloads */}
@@ -158,10 +159,10 @@ export async function GET(
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "10px",
               }}
             >
-              <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: "2px" }}>
+              <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: "2px" }}>
                 <path 
                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" 
                   strokeLinecap="round" 
@@ -176,37 +177,36 @@ export async function GET(
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "10px",
               }}
             >
-              <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: "2px" }}>
-                <path 
-                  d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" 
-                  strokeLinecap="round" 
+              <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: "2px" }}>
+                <path
+                  d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
-              <span>{loader}</span>
+              <span>{author}</span>
             </div>
           </div>
         </div>
 
         {/* CurseForge Logo */}
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="#F16436" style={{ flexShrink: 0 }}>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="#F16436" style={{ flexShrink: 0, marginLeft: "auto" }}>
           <path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" />
         </svg>
       </div>
     ),
     {
-      width: 800,
-      height: 200,
-      // Use the system font that matches the original closely
+      width: 680,
+      height: 160,
       fonts: [
         {
           name: "Noto Sans",
-          data: await loadGoogleFont("Noto Sans", modName + downloads + loader),
+          data: await loadGoogleFont("Noto Sans", modName),
           style: "normal",
-          weight: 800,
+          weight: 600,
         },
       ],
     }
