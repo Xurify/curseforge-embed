@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { CurseForgeAPI } from "../../../lib/curseforge-api";
 import { CurseForgeIcon } from "./icons/CurseForgeIcon";
+import { truncate } from "../../../lib/utils/utils";
 
 export const runtime = "edge";
 
@@ -71,6 +72,8 @@ export async function GET(
 
   const formattedDownloads = formatNumber(parseInt(downloads, 10));
   const cacheDuration = getCacheDuration(parseInt(downloads, 10));
+
+  console.log('modName', modName)
 
   return new ImageResponse(
     (
@@ -157,7 +160,7 @@ export async function GET(
               letterSpacing: "-0.1px",
             }}
           >
-            {modName}
+            {truncate(modName, 20)}
           </div>
 
           {/* Stats Row */}
@@ -218,7 +221,7 @@ export async function GET(
                   strokeLinejoin="round"
                 />
               </svg>
-              <span>{author}</span>
+              <span>{truncate(author || "Unknown", 15)}</span>
             </div>
           </div>
         </div>
