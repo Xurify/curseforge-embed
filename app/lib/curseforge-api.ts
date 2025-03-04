@@ -69,4 +69,23 @@ export class CurseForgeAPI {
       day: 'numeric',
     });
   }
+
+  /**
+   * Get the cache duration based on the number of downloads
+   * @param downloads The number of downloads
+   * @returns The cache duration in seconds
+   */
+  static getCacheDuration(downloads: number): number {
+    if (downloads >= 1000000) {
+      return 604800; // 1 week
+    } else if (downloads >= 100000) {
+      return 86400; // 1 day
+    } else if (downloads >= 10000) {
+      return 7200; // 2 hours
+    } else if (downloads >= 1000) {
+      return 3600; // 1 hour
+    } else {
+      return 3600; // 1 hour
+    }
+  }
 } 

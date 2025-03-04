@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { CurseForgeAPI } from "../../../lib/curseforge-api";
-import { CurseForgeIcon } from "./icons/CurseForgeIcon";
 import { truncate } from "../../../lib/utils/utils";
+import { CurseForgeIcon } from "./icons/CurseForgeIcon";
 
 export const runtime = "edge";
 
@@ -21,30 +21,6 @@ async function loadGoogleFont(font: string, text: string) {
   }
 
   throw new Error("failed to load font data");
-}
-
-function formatNumber(num: number): string {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
-  } else {
-    return num.toString();
-  }
-}
-
-function getCacheDuration(downloads: number): number {
-  if (downloads >= 1000000) {
-    return 604800; // 1 week
-  } else if (downloads >= 100000) {
-    return 86400; // 1 day
-  } else if (downloads >= 10000) {
-    return 7200; // 2 hours
-  } else if (downloads >= 1000) {
-    return 3600; // 1 hour
-  } else {
-    return 3600; // 1 hour
-  }
 }
 
 export async function GET(
@@ -70,8 +46,8 @@ export async function GET(
   )?.username;
   const logoUrl = data.thumbnail || "";
 
-  const formattedDownloads = formatNumber(parseInt(downloads, 10));
-  const cacheDuration = getCacheDuration(parseInt(downloads, 10));
+  const formattedDownloads = CurseForgeAPI.formatNumber(parseInt(downloads, 10));
+  const cacheDuration = CurseForgeAPI.getCacheDuration(parseInt(downloads, 10));
 
   console.log('modName', modName)
 
