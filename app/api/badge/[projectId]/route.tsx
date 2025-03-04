@@ -1,8 +1,6 @@
-// app/api/og/[projectId]/route.tsx
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { CurseForgeAPI } from "../../../lib/curseforge-api";
-import { CurseForgeProject } from "../../../types/curseforge";
 import { CurseForgeIcon } from "./icons/CurseForgeIcon";
 
 export const runtime = "edge";
