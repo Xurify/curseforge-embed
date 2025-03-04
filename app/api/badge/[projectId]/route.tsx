@@ -49,8 +49,6 @@ export async function GET(
   const formattedDownloads = CurseForgeAPI.formatNumber(parseInt(downloads, 10));
   const cacheDuration = CurseForgeAPI.getCacheDuration(parseInt(downloads, 10));
 
-  console.log('modName', modName)
-
   return new ImageResponse(
     (
       <div
