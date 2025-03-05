@@ -10,7 +10,7 @@ export function CurseForgeEmbedSkeleton({
   size?: "default" | "small";
 }) {
   return (
-    <div className="border border-[#E5E3E0] bg-white rounded-lg overflow-hidden hover:border-[#F16436] transition-colors shadow-sm">
+    <div className="border border-[#E5E3E0] bg-white rounded-lg overflow-hidden hover:border-[#EB622B] transition-colors shadow-sm">
       <a
         href={data.thumbnail}
         target="_blank"
@@ -34,7 +34,7 @@ export function CurseForgeEmbedSkeleton({
             </div>
             <div className="flex-grow min-w-0">
               <h2
-                className={`font-bold text-[#141414] truncate hover:text-[#F16436] transition-colors ${
+                className={`font-bold text-[#141414] truncate hover:text-[#EB622B] transition-colors ${
                   size === "small" ? "text-base" : "text-lg"
                 }`}
               >
@@ -52,7 +52,7 @@ export function CurseForgeEmbedSkeleton({
                   <svg
                     className={`${
                       size === "small" ? "w-3.5 h-3.5" : "w-4 h-4"
-                    } text-[#F16436]`}
+                    } text-[#EB622B]`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -70,7 +70,7 @@ export function CurseForgeEmbedSkeleton({
                   <svg
                     className={`${
                       size === "small" ? "w-3.5 h-3.5" : "w-4 h-4"
-                    } text-[#F16436]`}
+                    } text-[#EB622B]`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -92,7 +92,7 @@ export function CurseForgeEmbedSkeleton({
               {data.categories.map((category) => (
                 <span
                   key={category}
-                  className="px-3 py-1 bg-[#F9F7F5] text-[#6D7072] rounded-full text-xs font-medium hover:bg-[#F16436] hover:text-white transition-colors"
+                  className="px-3 py-1 bg-[#F9F7F5] text-[#6D7072] rounded-full text-xs font-medium hover:bg-[#EB622B] hover:text-white transition-colors"
                 >
                   {category}
                 </span>
@@ -100,7 +100,7 @@ export function CurseForgeEmbedSkeleton({
             </div>
           )}
         </div>
-        <div className="h-1 w-full bg-gradient-to-r from-[#F16436] to-[#F16436]/70" />
+        <div className="h-1 w-full bg-gradient-to-r from-[#EB622B] to-[#EB622B]/70" />
       </a>
     </div>
   );

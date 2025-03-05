@@ -95,7 +95,7 @@ export default async function CurseForgeBadge({
             {/* CurseForge Logo */}
             <div className="flex-shrink-0">
               <svg
-                className="w-5 h-5 text-[#F16436]"
+                className="w-5 h-5 text-[#EB622B]"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >

@@ -104,7 +104,7 @@ export function CurseForgeEmbedImageSkeleton({
                     style={{
                       width: size === "small" ? "0.875rem" : "1rem",
                       height: size === "small" ? "0.875rem" : "1rem",
-                      color: "#F16436",
+                      color: "#EB622B",
                     }}
                     fill="none"
                     stroke="currentColor"
@@ -130,7 +130,7 @@ export function CurseForgeEmbedImageSkeleton({
                     style={{
                       width: size === "small" ? "0.875rem" : "1rem",
                       height: size === "small" ? "0.875rem" : "1rem",
-                      color: "#F16436",
+                      color: "#EB622B",
                     }}
                     fill="none"
                     stroke="currentColor"
@@ -185,7 +185,7 @@ export function CurseForgeEmbedImageSkeleton({
             height: "0.25rem",
             width: "100%",
             background:
-              "linear-gradient(to right, #F16436, rgba(241, 100, 54, 0.7))",
+              "linear-gradient(to right, #EB622B, rgba(241, 100, 54, 0.7))",
           }}
         />
       </a>
