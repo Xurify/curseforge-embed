@@ -24,7 +24,16 @@ export default function Home() {
           CurseForge Embed
         </h1>
         <p className="text-[#6D7072] mb-8 max-w-3xl">
-          A simple and easy way to embed CurseForge projects on your website.{" "}
+          A simple and easy way to embed CurseForge projects on your website, powered by{" "}
+          <a 
+            href="https://cfwidget.com/#documentation:about"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#EB622B] hover:underline"
+          >
+            cfwidget.com
+          </a>
+          .{" "}
           <br />
           Choose between embedding the project as a an image, iframe, or using
           the React component.
