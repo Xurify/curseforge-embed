@@ -1,6 +1,7 @@
 import CurseForgeEmbed from "./components/CurseForgeEmbed";
 import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
 import CurseForgeBadge from "./components/CurseForgeBadge";
+import ApiDocs from "./components/ApiDocs";
 
 export default function Home() {
   const projectIds = {
@@ -218,40 +219,8 @@ import CurseForgeBadge from './components/CurseForgeBadge';
             </div>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">
-              API Wrapper
-            </h2>
-            <p className="text-[#6D7072] mb-6">
-              The component uses a Next.js API route to wrap the CurseForge API,
-              providing better security, caching, and error handling.
-            </p>
-
-            <div className="bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
-              <pre className="text-sm">
-                <code>{`// Server-side usage
-import CurseForgeEmbed from './components/CurseForgeEmbed';
-
-<CurseForgeEmbed projectId="238222" />
-
-// Client-side usage
-import ClientCurseForgeEmbed from './components/ClientCurseForgeEmbed';
-
-<ClientCurseForgeEmbed projectId="245755" />
-
-// Or use the hook directly
-import { useCurseForgeProject } from './hooks/useCurseForgeProject';
-
-function MyComponent() {
-  const { data, error, loading } = useCurseForgeProject("1181141");
-  
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  
-  return <h1>{data.title}</h1>;
-}`}</code>
-              </pre>
-            </div>
+          <section className="border-t border-gray-200 pt-12">
+            <ApiDocs />
           </section>
         </div>
       </div>
