@@ -12,9 +12,13 @@ export async function GET(
     const baseUrl = "https://api.cfwidget.com";
     const externalResponse = await fetch(`${baseUrl}/${projectId}`);
 
+    if (externalResponse.status === 404) {
+      return Response.json({ error: "Project not found" }, { status: 404 });
+    }
+
     if (!externalResponse.ok) {
       throw new Error(
-        `Failed to fetch project data: ${externalResponse.status} ${externalResponse.statusText}`
+        `Failed to fetch external project data: ${externalResponse.status} ${externalResponse.statusText}`
       );
     }
 
