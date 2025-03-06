@@ -25,7 +25,7 @@ export class CurseForgeAPI {
     );
     const response = await fetch(url, {
       next: {
-        revalidate,
+        revalidate: revalidate || CurseForgeAPI.DEFAULT_REVALIDATE,
       },
     });
 
