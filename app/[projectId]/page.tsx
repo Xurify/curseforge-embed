@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { CurseForgeAPI } from "../lib/curseforge-api";
 import { CurseForgeEmbedError } from "../components/CurseForgeEmbedError";
 import { CurseForgeEmbedSkeleton } from "../components/CurseForgeEmbedSkeleton";
@@ -13,7 +14,7 @@ export default async function ProjectPage({
   const { revalidate, size } = await searchParams;
 
   if (!parseInt(projectId)) {
-    return null;
+    return notFound();
   }
 
   try {
