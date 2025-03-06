@@ -163,7 +163,7 @@ export default function ApiDocs() {
             <div className="bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
               <pre className="text-sm">
                 <code>{`// Using the ${endpoint.name}
-const response = await fetch('https://your-domain.com${endpoint.endpoint}');
+const response = await fetch('https://curseforge-embed.vercel.app${endpoint.endpoint}');
 ${
   endpoint.name === "Project Data API"
     ? "const data = await response.json();"
