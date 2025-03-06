@@ -118,7 +118,7 @@ import CurseForgeBadge from './components/CurseForgeBadge';
 
 // Static Image
 <img 
-  src="/api/badge/238222?theme=dark"
+  src="https://curseforge-embed.vercel.app/238222.png?theme=dark"
   alt="CurseForge Project"
   width="250"
   height="70"

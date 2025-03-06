@@ -80,7 +80,8 @@ const apiEndpoints: ApiEndpoint[] = [
         name: "theme",
         type: "string",
         required: false,
-        description: 'The badge theme. Options: "light" or "dark". Default: "dark"',
+        description:
+          'The badge theme. Options: "light" or "dark". Default: "dark"',
       },
     ],
     response: {
@@ -114,7 +115,9 @@ export default function ApiDocs() {
           </div>
 
           <div>
-            <h4 className="text-lg font-medium mb-4 text-[#141414]">Parameters</h4>
+            <h4 className="text-lg font-medium mb-4 text-[#141414]">
+              Parameters
+            </h4>
             <div className="space-y-4">
               {endpoint.parameters.map((param) => (
                 <div
@@ -137,7 +140,9 @@ export default function ApiDocs() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-[#6D7072]">{param.description}</p>
+                    <p className="text-sm text-[#6D7072]">
+                      {param.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -145,7 +150,9 @@ export default function ApiDocs() {
           </div>
 
           <div>
-            <h4 className="text-lg font-medium mb-4 text-[#141414]">Response</h4>
+            <h4 className="text-lg font-medium mb-4 text-[#141414]">
+              Response
+            </h4>
             {endpoint.response.description && (
               <p className="text-[#6D7072] mb-4">
                 {endpoint.response.description}
@@ -157,23 +164,8 @@ export default function ApiDocs() {
               </pre>
             </div>
           </div>
-
-          <div>
-            <h4 className="text-lg font-medium mb-4 text-[#141414]">Example Usage</h4>
-            <div className="bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
-              <pre className="text-sm">
-                <code>{`// Using the ${endpoint.name}
-const response = await fetch('https://curseforge-embed.vercel.app${endpoint.endpoint}');
-${
-  endpoint.name === "Project Data API"
-    ? "const data = await response.json();"
-    : '// Use in an img tag\n<img src={response.url} alt="CurseForge Project" width="250" height="70" />'
-}`}</code>
-              </pre>
-            </div>
-          </div>
         </div>
       ))}
     </div>
   );
-} 
+}
