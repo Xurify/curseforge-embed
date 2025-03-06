@@ -2,15 +2,11 @@ import { NextRequest } from "next/server";
 import { CurseForgeAPI } from "@/app/lib/curseforge-api";
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ projectId: string }> }
 ) {
   const { projectId } = await params;
-
-  const searchParams = request.nextUrl.searchParams;
-  const revalidate = parseInt(
-    searchParams.get("revalidate") || String(CurseForgeAPI.DEFAULT_REVALIDATE)
-  );
+  const CACHE_DURATION = 3600;
 
   try {
     const baseUrl = "https://api.cfwidget.com";
@@ -44,7 +40,7 @@ export async function GET(
     return Response.json(filteredData, {
       status: 200,
       headers: {
-        "Cache-Control": `s-maxage=${revalidate}, stale-while-revalidate`,
+        "Cache-Control": `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=360, max-age=1800`,
       },
     });
   } catch (error) {
@@ -52,7 +48,12 @@ export async function GET(
 
     return Response.json(
       { error: "Failed to fetch CurseForge project" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store, must-revalidate",
+        },
+      }
     );
   }
 }
