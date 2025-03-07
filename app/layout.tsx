@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CurseForge Embed",
+  title: "CurseForge Embeds",
   description:
     "A simple and easy way to embed CurseForge projects on your website",
   icons: {
@@ -25,13 +25,13 @@ export const metadata: Metadata = {
       },
     ],
   },
-  applicationName: "CurseForge Embed",
+  applicationName: "CurseForge Embeds",
   authors: [{ name: "Xurify" }],
   creator: "Xurify",
   publisher: "Xurify",
   keywords: ["curseforge", "minecraft", "mods", "react", "nextjs", "embed"],
   openGraph: {
-    title: "CurseForge Embed",
+    title: "CurseForge Embeds",
     description:
       "A simple and easy way to embed CurseForge projects on your website",
     images: ["/og-image.svg"],
