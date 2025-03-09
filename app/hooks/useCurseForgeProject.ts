@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CurseForgeAPI } from "../lib/curseforge-api";
+import { CurseForgeAPI } from "../lib/curseforge";
 import { CurseForgeProject } from "../types/curseforge";
 
 interface UseCurseForgeProjectOptions {
@@ -22,7 +22,7 @@ interface UseCurseForgeProjectResult {
  */
 export function useCurseForgeProject(
   projectId: number | string,
-  options: UseCurseForgeProjectOptions = {}
+  options: UseCurseForgeProjectOptions = {},
 ): UseCurseForgeProjectResult {
   const [data, setData] = useState<CurseForgeProject | null>(null);
   const [error, setError] = useState<Error | null>(null);

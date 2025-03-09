@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
-import { CurseForgeAPI } from "@/app/lib/curseforge-api";
+import { CurseForgeAPI } from "@/app/lib/curseforge";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ projectId: string }> }
+  { params }: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await params;
   const CACHE_DURATION = 3600;
@@ -18,7 +18,7 @@ export async function GET(
 
     if (!externalResponse.ok) {
       throw new Error(
-        `Failed to fetch external project data: ${externalResponse.status} ${externalResponse.statusText}`
+        `Failed to fetch external project data: ${externalResponse.status} ${externalResponse.statusText}`,
       );
     }
 
@@ -57,7 +57,7 @@ export async function GET(
         headers: {
           "Cache-Control": "no-store, must-revalidate",
         },
-      }
+      },
     );
   }
 }

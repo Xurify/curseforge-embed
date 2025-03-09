@@ -1,4 +1,4 @@
-import { CurseForgeAPI } from "../lib/curseforge-api";
+import { CurseForgeAPI } from "../lib/curseforge";
 import { CurseForgeEmbedSkeleton } from "./CurseForgeEmbedSkeleton";
 import { CurseForgeEmbedError } from "./CurseForgeEmbedError";
 
@@ -19,7 +19,7 @@ export default async function CurseForgeEmbed({
     const data = await CurseForgeAPI.getProject(projectId, { revalidate });
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
-    console.error('CurseForgeEmbed error:', error);
+    console.error("CurseForgeEmbed error:", error);
     return <CurseForgeEmbedError fallback={fallback} />;
   }
 }

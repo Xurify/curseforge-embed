@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { CurseForgeProject } from "../types/curseforge";
-import { CurseForgeAPI } from "../lib/curseforge-api";
+import { CurseForgeAPI } from "../lib/curseforge";
 
 export function CurseForgeEmbedSkeleton({
   data,

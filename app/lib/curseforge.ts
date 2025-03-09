@@ -15,13 +15,13 @@ export class CurseForgeAPI {
 
   static async getProject(
     projectId: number,
-    options: { revalidate?: number } = {}
+    options: { revalidate?: number } = {},
   ): Promise<CurseForgeProject> {
     const { revalidate = CurseForgeAPI.DEFAULT_REVALIDATE } = options;
 
     const url = new URL(
       `/api/curseforge/${projectId}`,
-      process.env.NEXT_PUBLIC_APP_URL
+      process.env.NEXT_PUBLIC_APP_URL,
     );
     const response = await fetch(url, {
       next: {

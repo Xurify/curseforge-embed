@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
-import { CurseForgeAPI } from "../../../lib/curseforge-api";
+import { CurseForgeAPI } from "../../../lib/curseforge";
 import { truncate } from "../../../lib/utils/utils";
 import { CurseForgeIcon } from "./icons/CurseForgeIcon";
 
@@ -8,7 +8,7 @@ async function loadGoogleFont(font: string, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`;
   const css = await (await fetch(url)).text();
   const resource = css.match(
-    /src: url\((.+)\) format\('(opentype|truetype)'\)/
+    /src: url\((.+)\) format\('(opentype|truetype)'\)/,
   );
 
   if (resource) {
@@ -23,7 +23,7 @@ async function loadGoogleFont(font: string, text: string) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ projectId: string }> }
+  { params }: { params: Promise<{ projectId: string }> },
 ) {
   const { searchParams } = new URL(request.url);
   const { projectId } = await params;
@@ -38,15 +38,15 @@ export async function GET(
     const modName = data.title;
     const downloads = data.downloads.total.toString();
     const author = data.members.find(
-      (member) => member.title === "Owner"
+      (member) => member.title === "Owner",
     )?.username;
     const logoUrl = data.thumbnail || "";
 
     const formattedDownloads = CurseForgeAPI.formatNumber(
-      parseInt(downloads, 10)
+      parseInt(downloads, 10),
     );
     const cacheDuration = CurseForgeAPI.getCacheDuration(
-      parseInt(downloads, 10)
+      parseInt(downloads, 10),
     );
     return new ImageResponse(
       (
@@ -219,7 +219,7 @@ export async function GET(
             name: "Noto Sans",
             data: await loadGoogleFont(
               "Noto Sans",
-              modName + downloads + author
+              modName + downloads + author,
             ),
             style: "normal",
             weight: 700,
@@ -228,7 +228,7 @@ export async function GET(
         headers: {
           "Cache-Control": `public, immutable, no-transform, max-age=${cacheDuration}`,
         },
-      }
+      },
     );
   } catch (error) {
     return new Response("Project not found", { status: 404 });
