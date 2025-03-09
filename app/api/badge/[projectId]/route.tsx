@@ -4,8 +4,6 @@ import { CurseForgeAPI } from "../../../lib/curseforge-api";
 import { truncate } from "../../../lib/utils/utils";
 import { CurseForgeIcon } from "./icons/CurseForgeIcon";
 
-export const runtime = "edge";
-
 async function loadGoogleFont(font: string, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`;
   const css = await (await fetch(url)).text();
