@@ -7,7 +7,7 @@ import { CurseForgeProject } from "../types/curseforge";
 export class CurseForgeAPI {
   public static DEFAULT_REVALIDATE = 3600;
   /**
-   * Fetch a project by its ID
+   * Get a project by ID
    * @param projectId The CurseForge project ID
    * @param options Optional fetch configuration
    * @returns Promise with the project data
@@ -16,24 +16,29 @@ export class CurseForgeAPI {
   static async getProject(
     projectId: number,
     options: { revalidate?: number } = {},
-  ): Promise<CurseForgeProject> {
+  ): Promise<CurseForgeProject | null> {
     const { revalidate = CurseForgeAPI.DEFAULT_REVALIDATE } = options;
 
-    const url = new URL(
-      `/api/curseforge/${projectId}`,
-      process.env.NEXT_PUBLIC_APP_URL,
-    );
-    const response = await fetch(url, {
-      next: {
-        revalidate: revalidate || CurseForgeAPI.DEFAULT_REVALIDATE,
-      },
-    });
+    try {
+      const url = new URL(
+        `/api/curseforge/${projectId}`,
+        process.env.NEXT_PUBLIC_APP_URL,
+      );
+      const response = await fetch(url, {
+        next: {
+          revalidate: revalidate || CurseForgeAPI.DEFAULT_REVALIDATE,
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch project data: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch project data: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+      return null;
     }
-
-    return response.json();
   }
 
   /**

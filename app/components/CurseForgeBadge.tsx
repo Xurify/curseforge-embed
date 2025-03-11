@@ -10,6 +10,9 @@ export default async function CurseForgeBadge({
 }: CurseForgeBadgeProps) {
   try {
     const data = await CurseForgeAPI.getProject(Number(projectId));
+    if (!data) {
+      return <div>Failed to load badge</div>;
+    }
     return (
       <div className="h-[56px] bg-[#2D2D2D] rounded overflow-hidden">
         <a

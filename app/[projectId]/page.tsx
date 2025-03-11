@@ -21,6 +21,9 @@ export default async function ProjectPage({
     const data = await CurseForgeAPI.getProject(Number(projectId), {
       revalidate: Number(revalidate),
     });
+    if (!data) {
+      return notFound();
+    }
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
     console.error("Error fetching project data:", error);

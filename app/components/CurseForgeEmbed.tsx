@@ -17,6 +17,9 @@ export default async function CurseForgeEmbed({
 }: CurseForgeEmbedProps) {
   try {
     const data = await CurseForgeAPI.getProject(projectId, { revalidate });
+    if (!data) {
+      return <div>Failed to load embed</div>;
+    }
     return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
     console.error("CurseForgeEmbed error:", error);
