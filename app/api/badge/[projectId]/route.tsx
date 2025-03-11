@@ -42,7 +42,7 @@ export async function GET(
     const author = data.members.find(
       (member) => member.title === "Owner",
     )?.username;
-    const logoUrl = data.thumbnail || "";
+    const iconUrl = data.thumbnail || "";
 
     const formattedDownloads = CurseForgeAPI.formatNumber(
       parseInt(downloads, 10),
@@ -79,16 +79,18 @@ export async function GET(
               justifyContent: "center",
               width: "110px",
               height: "110px",
-              background: "linear-gradient(180deg, #EB622B 0%, #D44A1A 100%)",
+              ...(!iconUrl && {
+                background: "linear-gradient(180deg, #EB622B 0%, #D44A1A 100%)",
+              }),
               borderRadius: "8px",
               marginRight: "16px",
               overflow: "hidden",
               flexShrink: 0,
             }}
           >
-            {logoUrl ? (
+            {iconUrl ? (
               <img
-                src={logoUrl}
+                src={iconUrl}
                 width="100%"
                 height="100%"
                 style={{
