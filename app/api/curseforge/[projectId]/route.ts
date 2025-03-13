@@ -8,7 +8,11 @@ export async function GET(
 
   try {
     const baseUrl = "https://api.cfwidget.com";
-    const externalResponse = await fetch(`${baseUrl}/${projectId}`);
+    const externalResponse = await fetch(`${baseUrl}/${projectId}`, {
+      headers: {
+        "User-Agent": "xurify/curseforge-embed/1.0.0 (contact@xurify.com)",
+      },
+    });
 
     if (externalResponse.status === 404) {
       return Response.json({ error: "Project not found" }, { status: 404 });
