@@ -1,12 +1,10 @@
 import { NextRequest } from "next/server";
-import { CurseForgeAPI } from "@/app/lib/curseforge";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await params;
-  const CACHE_DURATION = 3600;
 
   try {
     const baseUrl = "https://api.cfwidget.com";
