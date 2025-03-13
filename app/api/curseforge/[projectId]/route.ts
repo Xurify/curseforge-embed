@@ -44,7 +44,7 @@ export async function GET(
     return Response.json(filteredData, {
       status: 200,
       headers: {
-        "Cache-Control": `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=360, max-age=1800`,
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=7200",
       },
     });
   } catch (error) {
