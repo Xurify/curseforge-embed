@@ -54,10 +54,10 @@ export async function GET(
 
     return Response.json(
       { error: "Failed to fetch CurseForge project" },
-      {
+      { 
         status: 500,
         headers: {
-          "Cache-Control": "no-store, must-revalidate",
+          "Cache-Control": `public, max-age=300, s-maxage=300`,
         },
       },
     );
