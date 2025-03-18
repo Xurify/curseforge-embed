@@ -29,6 +29,7 @@ export async function GET(
 ) {
   const { searchParams } = new URL(request.url);
   const { projectId } = await params;
+  const etag = `"${projectId}-${searchParams.toString()}"`;
 
   try {
     const data = await CurseForgeAPI.getProject(Number(projectId));
@@ -235,6 +236,12 @@ export async function GET(
       },
     );
   } catch (error) {
-    return new Response("Project not found", { status: 404 });
+    return new Response(`Failed to generate badge: ${error}`, { 
+      status: 500,
+      headers: {
+        "Cache-Control": "public, max-age=300, s-maxage=300", // Cache errors for 5 minutes
+        "ETag": etag,
+      }
+    });
   }
 }
