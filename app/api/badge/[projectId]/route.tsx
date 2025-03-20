@@ -34,8 +34,15 @@ export async function GET(
   try {
     const data = await CurseForgeAPI.getProject(Number(projectId));
     if (!data) {
-      return new Response("Project not found", { status: 404 });
+      return new Response("Project not found", { 
+        status: 404,
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=300", // Cache 404s for 5 minutes
+          "ETag": etag,
+        }
+      });
     }
+    
     const theme = searchParams.get("theme") || "dark";
 
     const modName = data.title;
