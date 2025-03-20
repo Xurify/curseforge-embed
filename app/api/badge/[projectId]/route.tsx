@@ -231,7 +231,9 @@ export async function GET(
           },
         ],
         headers: {
-          "Cache-Control": `public, immutable, no-transform, max-age=${cacheDuration}`,
+          "Cache-Control": `public, immutable, no-transform, max-age=${cacheDuration}, stale-while-revalidate=604800`,
+          "ETag": etag,
+          "Vary": "Accept, Accept-Encoding",
         },
       },
     );
