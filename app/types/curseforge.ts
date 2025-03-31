@@ -42,4 +42,5 @@ export interface CurseForgeProject {
   files: CurseForgeFile[];
   versions: Record<string, CurseForgeFile[]>;
   download: CurseForgeFile;
-} 
+  latestVersion: string;
+}

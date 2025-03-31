@@ -14,13 +14,15 @@ export const runtime = "nodejs";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ projectId: string }> }
+  { params }: { params: Promise<{ projectId: string }> },
 ) {
   const { searchParams } = new URL(request.url);
   const { projectId } = await params;
-  
-  const variant = searchParams.get("variant") as "default" | "full" | "compact" || "default";
-  const theme = searchParams.get("theme") as "dark" | "light" || "dark";
+
+  const variant =
+    (searchParams.get("variant") as "default" | "full" | "compact") ||
+    "default";
+  const theme = (searchParams.get("theme") as "dark" | "light") || "dark";
   const showDownloads = searchParams.get("showDownloads") !== "false";
   const showVersion = searchParams.get("showVersion") !== "false";
   const showButton = searchParams.get("showButton") !== "false";
@@ -29,52 +31,54 @@ export async function GET(
   const data = await CurseForgeAPI.getProject(Number(projectId));
 
   const contentHash = crypto
-    .createHash('md5')
-    .update(JSON.stringify({
-      project: {
-        downloads: data?.downloads,
-        title: data?.title,
-        icon: data?.thumbnail,
-      },
-      params: {
-        variant,
-        theme,
-        showDownloads,
-        showVersion,
-        showButton,
-        showPadding,
-      }
-    }))
-    .digest('hex');
+    .createHash("md5")
+    .update(
+      JSON.stringify({
+        project: {
+          downloads: data?.downloads,
+          title: data?.title,
+          icon: data?.thumbnail,
+        },
+        params: {
+          variant,
+          theme,
+          showDownloads,
+          showVersion,
+          showButton,
+          showPadding,
+        },
+      }),
+    )
+    .digest("hex");
 
   const etag = `"${projectId}-${contentHash}"`;
 
   try {
-    if (request.headers.get('if-none-match') === etag) {
+    if (request.headers.get("if-none-match") === etag) {
       return new Response(null, {
         status: 304,
         headers: {
-          'ETag': etag,
+          ETag: etag,
         },
       });
     }
 
     if (!data) {
-      return new Response("Project not found", { 
+      return new Response("Project not found", {
         status: 404,
         headers: {
           "Cache-Control": "public, max-age=300, s-maxage=300",
-          "ETag": etag,
-        }
+          ETag: etag,
+        },
       });
     }
 
     const modName = data.title;
-    const downloads = data.downloads.toString();
-    const author = data.members.find(
-      (member) => member.title === "Owner"
-    )?.username || "Unknown";
-    const latestVersion = CurseForgeAPI.getLatestVersion(data)?.version || "";
+    const downloads = data.downloads.total.toString();
+    const author =
+      data.members.find((member) => member.title === "Owner")?.username ||
+      "Unknown";
+    const latestVersion = data.latestVersion || "";
 
     let iconUrl = data.thumbnail || undefined;
     if (iconUrl?.toLowerCase().endsWith(".webp")) {
@@ -91,7 +95,7 @@ export async function GET(
     }
 
     const formattedDownloads = CurseForgeAPI.formatNumber(
-      parseInt(downloads, 10)
+      parseInt(downloads, 10),
     );
     //const cacheDuration = ModrinthAPI.getCacheDuration(parseInt(downloads, 10));
 
@@ -201,10 +205,10 @@ export async function GET(
     }
 
     const jost400 = await readFile(
-      join(process.cwd(), "public/assets/fonts/Jost-Regular.ttf")
+      join(process.cwd(), "public/assets/fonts/Jost-Regular.ttf"),
     );
     const jost700 = await readFile(
-      join(process.cwd(), "public/assets/fonts/Jost-Bold.ttf")
+      join(process.cwd(), "public/assets/fonts/Jost-Bold.ttf"),
     );
 
     return new ImageResponse(component, {
@@ -225,18 +229,18 @@ export async function GET(
       ],
       headers: {
         "Cache-Control": `public, max-age=3600, stale-while-revalidate=7200`,
-        "ETag": etag,
-        "Vary": "Accept, Accept-Encoding",
+        ETag: etag,
+        Vary: "Accept, Accept-Encoding",
       },
     });
   } catch (error) {
     console.error("Error generating badge", error);
-    return new Response(`Failed to generate badge: ${error}`, { 
+    return new Response(`Failed to generate badge: ${error}`, {
       status: 500,
       headers: {
         "Cache-Control": "public, max-age=300, s-maxage=300",
-        "ETag": etag,
-      }
+        ETag: etag,
+      },
     });
   }
 }

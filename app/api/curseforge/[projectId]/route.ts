@@ -1,3 +1,4 @@
+import { CurseForgeAPI } from "@/lib/api/curseforge";
 import { NextRequest } from "next/server";
 
 export async function GET(
@@ -26,6 +27,9 @@ export async function GET(
 
     const fullData = await externalResponse.json();
 
+    const latestVersion =
+      CurseForgeAPI.getLatestVersion(fullData)?.version || null;
+
     const filteredData = {
       id: fullData.id,
       title: fullData.title,
@@ -41,6 +45,7 @@ export async function GET(
       categories: fullData.categories,
       members: fullData.members,
       download: fullData.download,
+      latestVersion: latestVersion,
     };
 
     return Response.json(filteredData, {
@@ -54,7 +59,7 @@ export async function GET(
 
     return Response.json(
       { error: "Failed to fetch CurseForge project" },
-      { 
+      {
         status: 500,
         headers: {
           "Cache-Control": `public, max-age=300, s-maxage=300`,

@@ -92,20 +92,42 @@ export class CurseForgeAPI {
    * @param jsonData The JSON data of the project
    * @returns The latest version of the project
    */
-  static getLatestVersion(project: CurseForgeProject): LatestVersion | null {
-    let latestFile = project?.files?.reduce((latest, current) => {
+  static getLatestVersion(project: CurseForgeProject) {
+    if (!project?.files?.length) {
+      return null;
+    }
+
+    // First try to find files with actual version numbers
+    const filesWithNumericVersions = project.files.filter(
+      (file) => typeof file.version === "string" && file.version.match(/^\d/),
+    );
+
+    // If we found files with numeric versions, use those
+    const filesToCheck =
+      filesWithNumericVersions.length > 0
+        ? filesWithNumericVersions
+        : project.files;
+
+    // Find the latest file by upload date
+    let latestFile = filesToCheck.reduce((latest, current) => {
       const latestDate = new Date(latest.uploaded_at);
       const currentDate = new Date(current.uploaded_at);
       return currentDate > latestDate ? current : latest;
-    }, project?.files?.[0]);
+    }, filesToCheck[0]);
 
-    if (!latestFile) {
-      return null;
+    // Extract the actual version from the filename if the version field isn't numeric
+    let version = latestFile.version;
+    if (!version.match(/^\d/)) {
+      // Try to extract version from filename using regex
+      const versionMatch = latestFile.name.match(/(\d+\.\d+\.\d+)/);
+      if (versionMatch) {
+        version = versionMatch[1];
+      }
     }
 
     return {
       fileName: latestFile.name,
-      version: latestFile.version,
+      version: version,
       uploadDate: latestFile.uploaded_at,
       downloadUrl: latestFile.url,
       fileSize: latestFile.filesize,

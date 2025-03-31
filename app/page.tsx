@@ -2,192 +2,174 @@ import CurseForgeEmbed from "./components/CurseForgeEmbed";
 import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
 import CurseForgeBadge from "./components/CurseForgeBadge";
 import ApiDocs from "./components/ApiDocs";
-import Image from "next/image";
+
+const projectIds = {
+  sodium: 1181141,
+  iris: 1181141,
+  elytraAssistant: 1181141,
+  //jeiJustEnoughItems: 238222,
+  //waystones: 245755,
+};
 
 export default function Home() {
-  const projectIds = {
-    elytraAssistant: 1181141,
-    jeiJustEnoughItems: 238222,
-    waystones: 245755,
-  };
-
   return (
-    <main className="min-h-screen bg-[#F9F7F5] p-4 pb-16">
+    <main className="min-h-screen bg-[#1B1D1F] p-4 pb-16">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold mb-4 text-[#141414] flex items-center gap-2">
+        <h1 className="text-3xl font-bold mb-4 text-white flex items-center gap-2">
           <svg
-            className="w-8 h-8 text-[#EB622B]"
+            className="w-8 h-8 text-brand"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
             <path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" />
           </svg>
-          CurseForge Embed
+          Modrinth Embed
         </h1>
-        <p className="text-[#6D7072] mb-8 max-w-3xl">
-          A simple and easy way to embed CurseForge projects on your website, powered by{" "}
-          <a 
-            href="https://cfwidget.com/#documentation:about"
+        <p className="text-gray-400 mb-8 max-w-3xl">
+          A modern way to embed Modrinth projects on your website, powered by
+          the{" "}
+          <a
+            href="https://docs.modrinth.com/api"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#EB622B] hover:underline"
+            className="text-brand hover:underline"
           >
-            cfwidget.com
+            Modrinth API
           </a>
-          .{" "}
-          <br />
-          Choose between embedding the project as a an image, iframe, or using
-          the React component.
+          . <br />
+          Choose between server and client components, or use the compact badge
+          format.
         </p>
 
         <div className="space-y-12">
           <section>
-            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">
-              Project Badge
+            <h2 className="text-2xl font-semibold mb-2 text-white">
+              Project Badges
             </h2>
-            <p className="text-[#6D7072] mb-6">
-              A compact badge that shows key project information in a single
-              line. Available as both a React component and a static image.
+            <p className="text-gray-400 mb-6">
+              Choose from three different badge styles: Default, Compact, and
+              Full. Each style can be customized with various options.
             </p>
 
             <div className="space-y-8">
+              {/* Default Variant */}
               <div>
-                <div className="grid gap-8 md:grid-cols-2">
-                  <div>
-                    <h4 className="text-base font-medium mb-2 text-[#141414] flex items-center gap-2">
-                      <svg
-                        className="w-5 h-5 text-green-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      React Component
-                    </h4>
-                    <div className="space-y-4">
-                      <CurseForgeBadge
-                        projectId={projectIds.jeiJustEnoughItems}
-                      />
-                      <CurseForgeBadge projectId={projectIds.waystones} />
-                      <CurseForgeBadge projectId={projectIds.elytraAssistant} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-base font-medium mb-2 text-[#141414] flex items-center gap-2">
-                      <svg
-                        className="w-5 h-5 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 16l4 4m0 0l4-4m-4 4V4"
-                        />
-                      </svg>
-                      Static Image
-                    </h4>
-                    <div className="flex flex-col space-y-4 h-[208px]">
-                      <Image
-                        src={`/${projectIds.jeiJustEnoughItems}.png?theme=dark`}
-                        alt="JEI - Just Enough Items"
-                        width="250"
-                        height="58"
-                        quality={100}
-                      />
-                      <img
-                        src={`/${projectIds.waystones}.png?theme=dark`}
-                        alt="Waystones"
-                        width="250"
-                        height="58"
-                      />
-                      <img
-                        src={`/${projectIds.elytraAssistant}.png?theme=dark`}
-                        alt="Elytra Assistant"
-                        width="250"
-                        height="58"
-                      />
-                    </div>
+                <h3 className="text-xl font-medium mb-4 text-white">
+                  Default Badge
+                </h3>
+                <div className="space-y-4">
+                  <a
+                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    className="inline-flex"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`/${projectIds.sodium}.png`}
+                      alt="Sodium"
+                      width="340"
+                      height="80"
+                    />
+                  </a>
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                    <pre className="text-sm">
+                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png" alt="Modrinth Project" width="340" height="80" />`}</code>
+                    </pre>
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-8 bg-[#141414] text-white p-4 rounded-lg overflow-x-auto">
-                  <pre className="text-sm">
-                    <code>{`// React Component
-import CurseForgeBadge from './components/CurseForgeBadge';
+              {/* Compact Variant */}
+              <div>
+                <h3 className="text-xl font-medium mb-4 text-white">
+                  Compact Badge
+                </h3>
+                <div className="space-y-4">
+                  <a
+                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    className="inline-flex"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`/${projectIds.sodium}.png?variant=compact`}
+                      alt="Sodium"
+                      height="32"
+                    />
+                  </a>
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                    <pre className="text-sm">
+                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png?variant=compact" alt="Modrinth Project" height="32" />`}</code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
 
-<CurseForgeBadge projectId="238222" />
+              {/* Full Variant */}
+              <div>
+                <h3 className="text-xl font-medium mb-4 text-white">
+                  Full Badge
+                </h3>
+                <div className="space-y-4">
+                  <a
+                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    className="inline-flex"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`/${projectIds.sodium}.png?variant=full`}
+                      alt="Sodium"
+                      width="600"
+                      height="260"
+                    />
+                  </a>
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                    <pre className="text-sm">
+                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png?variant=full" alt="Modrinth Project" width="900" height="400" />`}</code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
 
-// Static Image
+              <div className="mt-8 bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                <pre className="text-sm">
+                  <code>{`<!-- Basic usage -->
 <img 
-  src="https://curseforge-embed.vercel.app/238222.png?theme=dark"
-  alt="CurseForge Project"
-  width="250"
-  height="70"
-/>`}</code>
-                  </pre>
-                </div>
+  src="https://modrinth-embed.vercel.app/AANobbMI.png"
+  alt="Modrinth Project"
+  width="340"
+  height="80"
+/>
+
+<!-- Optional URL parameters -->
+?variant=default|compact|full    # Change badge style
+?theme=dark|light               # Change color theme
+?showDownloads=true|false      # Show/hide download count
+?showVersion=true|false        # Show/hide version number
+?showButton=true|false         # Show/hide download button (full variant only)
+?showPadding=true|false        # Show/hide padding (full variant only)
+`}</code>
+                </pre>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">
-              Component Sizes
-            </h2>
-            <p className="text-[#6D7072] mb-6">
-              The component comes in two sizes: default and small. Choose the
-              one that fits your layout best.
-            </p>
-
-            <div className="grid gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="text-xl font-medium mb-4 text-[#141414]">
-                  Default Size
-                </h3>
-                <div className="max-w-2xl">
-                  <CurseForgeEmbed projectId={projectIds.elytraAssistant} />
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-medium mb-4 text-[#141414]">
-                  Small Size
-                </h3>
-                <div className="max-w-xl">
-                  <CurseForgeEmbed
-                    projectId={projectIds.elytraAssistant}
-                    size="small"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-2 text-[#141414]">
+            <h2 className="text-2xl font-semibold mb-2 text-white">
               Server vs Client Components
             </h2>
-            <p className="text-[#6D7072] mb-6">
-              Choose between server components (better for SEO and performance)
-              or client components (better for interactivity). Both use the same
-              API wrapper under the hood.
+            <p className="text-gray-400 mb-6">
+              Choose between server components (better for SEO and initial load)
+              or client components (better for dynamic updates and loading
+              states).
             </p>
 
             <div className="grid gap-8 md:grid-cols-2">
               <div>
-                <h3 className="text-xl font-medium mb-4 text-[#141414] flex items-center gap-2">
+                <h3 className="text-xl font-medium mb-4 text-white flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-green-600"
+                    className="w-5 h-5 text-brand"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -202,14 +184,14 @@ import CurseForgeBadge from './components/CurseForgeBadge';
                   Server Component
                 </h3>
                 <div className="max-w-2xl">
-                  <CurseForgeEmbed projectId={projectIds.jeiJustEnoughItems} />
+                  <CurseForgeEmbed projectId={projectIds.iris} />
                 </div>
               </div>
 
               <div>
-                <h3 className="text-xl font-medium mb-4 text-[#141414] flex items-center gap-2">
+                <h3 className="text-xl font-medium mb-4 text-white flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-blue-600"
+                    className="w-5 h-5 text-brand"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -224,14 +206,12 @@ import CurseForgeBadge from './components/CurseForgeBadge';
                   Client Component
                 </h3>
                 <div className="max-w-2xl">
-                  <ClientCurseForgeEmbed projectId={projectIds.waystones} />
+                  <ClientCurseForgeEmbed
+                    projectId={projectIds.elytraAssistant}
+                  />
                 </div>
               </div>
             </div>
-          </section>
-
-          <section className="border-t border-gray-200 pt-12">
-            <ApiDocs />
           </section>
         </div>
       </div>
