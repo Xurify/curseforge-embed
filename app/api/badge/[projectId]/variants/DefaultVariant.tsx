@@ -139,7 +139,7 @@ export default function DefaultVariant({
                 strokeLinejoin="round"
               />
             </svg>
-            <span>{CurseForgeAPI.formatNumber(parseInt(downloads))}</span>
+            <span>{downloads}</span>
           </div>
 
           {/* Author */}
@@ -172,4 +172,4 @@ export default function DefaultVariant({
       <CurseForgeIcon />
     </div>
   );
-} 
+}
