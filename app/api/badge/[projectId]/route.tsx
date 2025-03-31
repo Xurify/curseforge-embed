@@ -1,254 +1,240 @@
 import { ImageResponse } from "next/og";
-import { NextRequest } from "next/server";
-import { CurseForgeAPI } from "../../../lib/curseforge";
-import { truncate } from "../../../lib/utils/utils";
-import { CurseForgeIcon } from "./icons/CurseForgeIcon";
+import { ImageResponseOptions, NextRequest } from "next/server";
+import { join } from "path";
+import { readFile } from "fs/promises";
+import sharp from "sharp";
+import crypto from "crypto";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
+import { CurseForgeProject } from "@/app/types/curseforge";
+import DefaultVariant from "./variants/DefaultVariant";
+import FullVariant from "./variants/FullVariant";
+import CompactVariant from "./variants/CompactVariant";
 
-export const runtime = "edge";
-
-async function loadGoogleFont(font: string, text: string) {
-  const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`;
-  const css = await (await fetch(url)).text();
-  const resource = css.match(
-    /src: url\((.+)\) format\('(opentype|truetype)'\)/,
-  );
-
-  if (resource) {
-    const response = await fetch(resource[1]);
-    if (response.status == 200) {
-      return await response.arrayBuffer();
-    }
-  }
-
-  throw new Error("failed to load font data");
-}
+export const runtime = "nodejs";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ projectId: string }> },
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   const { searchParams } = new URL(request.url);
   const { projectId } = await params;
-  const etag = `"${projectId}-${searchParams.toString()}"`;
+  
+  const variant = searchParams.get("variant") as "default" | "full" | "compact" || "default";
+  const theme = searchParams.get("theme") as "dark" | "light" || "dark";
+  const showDownloads = searchParams.get("showDownloads") !== "false";
+  const showVersion = searchParams.get("showVersion") !== "false";
+  const showButton = searchParams.get("showButton") !== "false";
+  const showPadding = searchParams.get("showPadding") === "true";
+
+  const data = await CurseForgeAPI.getProject(Number(projectId));
+
+  const contentHash = crypto
+    .createHash('md5')
+    .update(JSON.stringify({
+      project: {
+        downloads: data?.downloads,
+        title: data?.title,
+        icon: data?.thumbnail,
+      },
+      params: {
+        variant,
+        theme,
+        showDownloads,
+        showVersion,
+        showButton,
+        showPadding,
+      }
+    }))
+    .digest('hex');
+
+  const etag = `"${projectId}-${contentHash}"`;
 
   try {
-    const data = await CurseForgeAPI.getProject(Number(projectId));
+    if (request.headers.get('if-none-match') === etag) {
+      return new Response(null, {
+        status: 304,
+        headers: {
+          'ETag': etag,
+        },
+      });
+    }
+
     if (!data) {
       return new Response("Project not found", { 
         status: 404,
         headers: {
-          "Cache-Control": "public, max-age=300, s-maxage=300", // Cache 404s for 5 minutes
+          "Cache-Control": "public, max-age=300, s-maxage=300",
           "ETag": etag,
         }
       });
     }
-    
-    const theme = searchParams.get("theme") || "dark";
 
     const modName = data.title;
-    const downloads = data.downloads.total.toString();
+    const downloads = data.downloads.toString();
     const author = data.members.find(
-      (member) => member.title === "Owner",
-    )?.username;
-    const iconUrl = data.thumbnail || "";
+      (member) => member.title === "Owner"
+    )?.username || "Unknown";
+    const latestVersion = CurseForgeAPI.getLatestVersion(data)?.version || "";
+
+    let iconUrl = data.thumbnail || undefined;
+    if (iconUrl?.toLowerCase().endsWith(".webp")) {
+      const response = await fetch(iconUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch icon");
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const pngBuffer = await sharp(buffer).png().toBuffer();
+
+      iconUrl = `data:image/png;base64,${pngBuffer.toString("base64")}`;
+    }
 
     const formattedDownloads = CurseForgeAPI.formatNumber(
-      parseInt(downloads, 10),
+      parseInt(downloads, 10)
     );
-    const cacheDuration = CurseForgeAPI.getCacheDuration(
-      parseInt(downloads, 10),
-    );
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            background: theme === "dark" ? "#2D2D2D" : "#F8F9F9",
-            border: `3px solid ${theme === "dark" ? "#404040" : "#D9D9D9"}`,
-            borderRadius: "8px",
-            padding: "16px 24px",
-            color: theme === "dark" ? "#E1E3E5" : "#242729",
-            fontFamily: '"Noto Sans", sans-serif',
-            boxShadow:
-              theme === "dark"
-                ? "0 1px 3px rgba(0,0,0,0.15)"
-                : "0 1px 2px rgba(0,0,0,0.05)",
-          }}
-        >
-          {/* Logo/Icon */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "110px",
-              height: "110px",
-              ...(!iconUrl && {
-                background: "linear-gradient(180deg, #EB622B 0%, #D44A1A 100%)",
-              }),
-              borderRadius: "8px",
-              marginRight: "16px",
-              overflow: "hidden",
-              flexShrink: 0,
-            }}
-          >
-            {iconUrl ? (
-              <img
-                src={iconUrl}
-                width="100%"
-                height="100%"
-                style={{
-                  objectFit: "contain",
-                  imageRendering: "crisp-edges",
-                }}
-                alt="Mod logo"
-              />
-            ) : (
-              <div
-                style={{
-                  fontSize: "32px",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              >
-                {modName.substring(0, 1)}
-              </div>
-            )}
-          </div>
+    //const cacheDuration = ModrinthAPI.getCacheDuration(parseInt(downloads, 10));
 
-          {/* Content */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              height: "100%",
-              flex: 1,
-              minWidth: 0,
-              lineHeight: 1.4,
-            }}
-          >
-            {/* Mod Name */}
-            <div
-              style={{
-                fontSize: "36px",
-                fontWeight: 700,
-                color: theme === "dark" ? "#FFFFFF" : "#242729",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                marginBottom: "12px",
-                letterSpacing: "-0.1px",
-              }}
-            >
-              {truncate(modName, 20)}
-            </div>
+    const generateCompactDimensions = (project: CurseForgeProject) => {
+      const height = 32;
+      const fontSize = 14;
+      const padding = 12;
+      const iconSize = 24;
+      let width = padding * 2 + project.title.length * (fontSize * 0.6);
+      if (project.thumbnail) width += iconSize + 8;
+      if (showDownloads)
+        width +=
+          CurseForgeAPI.formatNumber(project.downloads.total).length *
+            (fontSize * 0.6) +
+          16;
+      if (showVersion && latestVersion)
+        width += latestVersion.toString().length * (fontSize * 0.6) + 24;
 
-            {/* Stats Row */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "24px",
-                color: theme === "dark" ? "#9BA0A4" : "#6A737C",
-                fontSize: "28px",
-                fontWeight: 500,
-              }}
-            >
-              {/* Downloads */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <svg
-                  width="32"
-                  height="32"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2px"
-                >
-                  <path
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span>{formattedDownloads}</span>
-              </div>
+      return { width, height };
+    };
 
-              {/* Author */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <svg
-                  width="32"
-                  height="32"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2px"
-                >
-                  <path
-                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span>{truncate(author || "Unknown", 15)}</span>
-              </div>
-            </div>
-          </div>
-
-          <CurseForgeIcon />
-          {/* <svg
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="#EB622B"
-            style={{ flexShrink: 0, marginLeft: "auto" }}
-          >
-            <path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" />
-          </svg> */}
-        </div>
-      ),
-      {
+    const OPTIONS: Record<string, ImageResponseOptions> = {
+      default: {
         width: 680,
         height: 160,
-        fonts: [
-          {
-            name: "Noto Sans",
-            data: await loadGoogleFont(
-              "Noto Sans",
-              modName + downloads + author,
-            ),
-            style: "normal",
-            weight: 700,
-          },
-        ],
-        headers: {
-          "Cache-Control": `public, immutable, no-transform, max-age=${cacheDuration}, stale-while-revalidate=604800`,
-          "ETag": etag,
-          "Vary": "Accept, Accept-Encoding",
-        },
       },
+      full: {
+        width: showPadding ? 1200 : 900,
+        height: showPadding ? 600 : 405,
+      },
+      compact: {
+        width: generateCompactDimensions(data).width,
+        height: generateCompactDimensions(data).height,
+      },
+    };
+
+    const options = OPTIONS[variant];
+
+    const colors = {
+      light: {
+        background: "#ffffff",
+        background2: "#f9fafb",
+        text: "#1f2937",
+        secondaryText: "#585858",
+        border: "#e5e7eb",
+        button: "#10B981",
+        buttonText: "#ffffff",
+      },
+      dark: {
+        background: "#2D2D2D",
+        background2: "#16181C",
+        text: "#ffffff",
+        secondaryText: "#9BA0A4",
+        border: "#404040",
+        button: "#10B981",
+        buttonText: "#ffffff",
+      },
+    };
+
+    const themeColors = theme === "dark" ? colors.dark : colors.light;
+
+    const getVariant = () => {
+      switch (variant) {
+        case "default":
+          return (
+            <DefaultVariant
+              iconUrl={iconUrl}
+              modName={modName}
+              author={author}
+              downloads={formattedDownloads}
+              theme={theme}
+            />
+          );
+        case "full":
+          return (
+            <FullVariant
+              iconUrl={iconUrl}
+              project={data}
+              themeColors={themeColors}
+              showPadding={showPadding}
+              showDownloads={showDownloads}
+              showVersion={showVersion}
+              showButton={showButton}
+              versionNumber={latestVersion || ""}
+            />
+          );
+        case "compact":
+          return (
+            <CompactVariant
+              iconUrl={iconUrl}
+              project={data}
+              themeColors={themeColors}
+              showDownloads={showDownloads}
+              showVersion={showVersion}
+              versionNumber={latestVersion || ""}
+              width={generateCompactDimensions(data).width}
+            />
+          );
+        default:
+          return null;
+      }
+    };
+    const component = getVariant();
+
+    if (!component) {
+      return new Response("Invalid variant", { status: 400 });
+    }
+
+    const jost400 = await readFile(
+      join(process.cwd(), "public/assets/fonts/Jost-Regular.ttf")
     );
+    const jost700 = await readFile(
+      join(process.cwd(), "public/assets/fonts/Jost-Bold.ttf")
+    );
+
+    return new ImageResponse(component, {
+      ...options,
+      fonts: [
+        {
+          name: "Jost",
+          data: jost400,
+          weight: 400,
+          style: "normal",
+        },
+        {
+          name: "Jost",
+          data: jost700,
+          weight: 700,
+          style: "normal",
+        },
+      ],
+      headers: {
+        "Cache-Control": `public, max-age=3600, stale-while-revalidate=7200`,
+        "ETag": etag,
+        "Vary": "Accept, Accept-Encoding",
+      },
+    });
   } catch (error) {
+    console.error("Error generating badge", error);
     return new Response(`Failed to generate badge: ${error}`, { 
       status: 500,
       headers: {
-        "Cache-Control": "public, max-age=300, s-maxage=300", // Cache errors for 5 minutes
+        "Cache-Control": "public, max-age=300, s-maxage=300",
         "ETag": etag,
       }
     });

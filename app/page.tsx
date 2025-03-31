@@ -2,6 +2,7 @@ import CurseForgeEmbed from "./components/CurseForgeEmbed";
 import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
 import CurseForgeBadge from "./components/CurseForgeBadge";
 import ApiDocs from "./components/ApiDocs";
+import Image from "next/image";
 
 export default function Home() {
   const projectIds = {
@@ -95,24 +96,25 @@ export default function Home() {
                       </svg>
                       Static Image
                     </h4>
-                    <div className="flex flex-col space-y-4">
-                      <img
+                    <div className="flex flex-col space-y-4 h-[208px]">
+                      <Image
                         src={`/${projectIds.jeiJustEnoughItems}.png?theme=dark`}
                         alt="JEI - Just Enough Items"
                         width="250"
-                        height="70"
+                        height="58"
+                        quality={100}
                       />
                       <img
                         src={`/${projectIds.waystones}.png?theme=dark`}
                         alt="Waystones"
                         width="250"
-                        height="70"
+                        height="58"
                       />
                       <img
                         src={`/${projectIds.elytraAssistant}.png?theme=dark`}
                         alt="Elytra Assistant"
                         width="250"
-                        height="70"
+                        height="58"
                       />
                     </div>
                   </div>
