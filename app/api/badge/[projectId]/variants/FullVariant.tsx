@@ -185,7 +185,7 @@ export const FullVariant = ({
                 width: "100%",
               }}
             >
-              View on Modrinth
+              View on CurseForge
               <svg
                 width="24"
                 height="24"

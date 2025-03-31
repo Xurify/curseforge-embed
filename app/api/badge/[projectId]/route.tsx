@@ -97,7 +97,7 @@ export async function GET(
     const formattedDownloads = CurseForgeAPI.formatNumber(
       parseInt(downloads, 10),
     );
-    //const cacheDuration = ModrinthAPI.getCacheDuration(parseInt(downloads, 10));
+    //const cacheDuration = CurseForgeAPI.getCacheDuration(parseInt(downloads, 10));
 
     const generateCompactDimensions = (project: CurseForgeProject) => {
       const height = 32;

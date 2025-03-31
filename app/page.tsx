@@ -4,7 +4,7 @@ import CurseForgeBadge from "./components/CurseForgeBadge";
 import ApiDocs from "./components/ApiDocs";
 
 const projectIds = {
-  sodium: 1181141,
+  sodium: 394468,
   iris: 1181141,
   elytraAssistant: 1181141,
   //jeiJustEnoughItems: 238222,
@@ -23,18 +23,18 @@ export default function Home() {
           >
             <path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" />
           </svg>
-          Modrinth Embed
+          CurseForge Embed
         </h1>
         <p className="text-gray-400 mb-8 max-w-3xl">
-          A modern way to embed Modrinth projects on your website, powered by
+          A modern way to embed CurseForge projects on your website, powered by
           the{" "}
           <a
-            href="https://docs.modrinth.com/api"
+            href="https://cfwidget.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-brand hover:underline"
           >
-            Modrinth API
+            CurseForge API
           </a>
           . <br />
           Choose between server and client components, or use the compact badge
@@ -59,7 +59,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.sodium}`}
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -73,7 +73,7 @@ export default function Home() {
                   </a>
                   <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
                     <pre className="text-sm">
-                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png" alt="Modrinth Project" width="340" height="80" />`}</code>
+                      <code>{`<img src="https://curseforge-embed.vercel.app/394468.png" alt="CurseForge Project" width="340" height="80" />`}</code>
                     </pre>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.sodium}`}
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -99,7 +99,7 @@ export default function Home() {
                   </a>
                   <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
                     <pre className="text-sm">
-                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png?variant=compact" alt="Modrinth Project" height="32" />`}</code>
+                      <code>{`<img src="https://curseforge-embed.vercel.app/394468.png?variant=compact" alt="CurseForge Project" height="32" />`}</code>
                     </pre>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://modrinth.com/mod/${projectIds.sodium}`}
+                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.elytraAssistant}`}
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -126,7 +126,7 @@ export default function Home() {
                   </a>
                   <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
                     <pre className="text-sm">
-                      <code>{`<img src="https://modrinth-embed.vercel.app/AANobbMI.png?variant=full" alt="Modrinth Project" width="900" height="400" />`}</code>
+                      <code>{`<img src="https://curseforge-embed.vercel.app/394468.png?variant=full" alt="CurseForge Project" width="900" height="400" />`}</code>
                     </pre>
                   </div>
                 </div>
@@ -136,8 +136,8 @@ export default function Home() {
                 <pre className="text-sm">
                   <code>{`<!-- Basic usage -->
 <img 
-  src="https://modrinth-embed.vercel.app/AANobbMI.png"
-  alt="Modrinth Project"
+  src="https://curseforge-embed.vercel.app/394468.png"
+  alt="CurseForge Project"
   width="340"
   height="80"
 />
