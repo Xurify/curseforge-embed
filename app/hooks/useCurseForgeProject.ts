@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CurseForgeAPI } from "../lib/curseforge";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
 import { CurseForgeProject } from "../types/curseforge";
 
 interface UseCurseForgeProjectOptions {

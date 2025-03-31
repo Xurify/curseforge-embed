@@ -1,4 +1,4 @@
-import { CurseForgeAPI } from "../lib/curseforge";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
 import { CurseForgeEmbedSkeleton } from "./CurseForgeEmbedSkeleton";
 import { CurseForgeEmbedError } from "./CurseForgeEmbedError";
 

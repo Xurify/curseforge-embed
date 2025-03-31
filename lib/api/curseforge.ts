@@ -1,4 +1,13 @@
-import { CurseForgeProject } from "../types/curseforge";
+import { CurseForgeProject } from "@/app/types/curseforge";
+
+interface LatestVersion {
+  fileName: string;
+  version: string;
+  uploadDate: string;
+  downloadUrl: string;
+  fileSize: number;
+  minecraftVersions: string[];
+}
 
 /**
  * CurseForge API wrapper
@@ -31,7 +40,8 @@ export class CurseForgeAPI {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch project data: ${response.status}`);
+        console.error(`Failed to fetch project data: ${response.status}`);
+        return null;
       }
 
       return response.json();
@@ -75,6 +85,32 @@ export class CurseForgeAPI {
       month: "short",
       day: "numeric",
     });
+  }
+
+  /**
+   * Get the latest version of a project
+   * @param jsonData The JSON data of the project
+   * @returns The latest version of the project
+   */
+  static getLatestVersion(project: CurseForgeProject): LatestVersion | null {
+    let latestFile = project?.files?.reduce((latest, current) => {
+      const latestDate = new Date(latest.uploaded_at);
+      const currentDate = new Date(current.uploaded_at);
+      return currentDate > latestDate ? current : latest;
+    }, project?.files?.[0]);
+
+    if (!latestFile) {
+      return null;
+    }
+
+    return {
+      fileName: latestFile.name,
+      version: latestFile.version,
+      uploadDate: latestFile.uploaded_at,
+      downloadUrl: latestFile.url,
+      fileSize: latestFile.filesize,
+      minecraftVersions: latestFile.versions.filter((v) => v.match(/^\d/)),
+    };
   }
 
   /**

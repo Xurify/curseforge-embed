@@ -1,5 +1,5 @@
 import { CurseForgeProject } from "../types/curseforge";
-import { CurseForgeAPI } from "../lib/curseforge";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
 
 export function CurseForgeEmbedImageSkeleton({
   data,

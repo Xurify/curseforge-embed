@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CurseForgeAPI } from "../lib/curseforge";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
 
 interface CurseForgeBadgeProps {
   projectId: string | number;

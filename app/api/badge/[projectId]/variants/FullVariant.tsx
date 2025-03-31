@@ -32,7 +32,7 @@ export const FullVariant = ({
   versionNumber,
 }: FullVariantProps) => {
   const author = project.members.find(
-    (member) => member.title === "Owner"
+    (member) => member.title === "Owner",
   )?.username;
   return (
     <div
@@ -135,7 +135,7 @@ export const FullVariant = ({
             lineHeight: 1.5,
           }}
         >
-          {project.description}
+          {project.summary}
         </p>
 
         {/* Stats */}

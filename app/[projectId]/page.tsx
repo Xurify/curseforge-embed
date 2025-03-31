@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { CurseForgeAPI } from "../lib/curseforge";
-import { CurseForgeEmbedError } from "../components/CurseForgeEmbedError";
-import { CurseForgeEmbedSkeleton } from "../components/CurseForgeEmbedSkeleton";
+import { CurseForgeAPI } from "@/lib/api/curseforge";
+import { CurseForgeEmbedError } from "@/app/components/CurseForgeEmbedError";
+import { CurseForgeEmbedSkeleton } from "@/app/components/CurseForgeEmbedSkeleton";
 
 export default async function ProjectPage({
   params,
