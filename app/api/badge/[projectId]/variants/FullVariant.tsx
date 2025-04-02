@@ -181,7 +181,7 @@ export const FullVariant = ({
                 padding: "12px 24px",
                 borderRadius: "8px",
                 fontSize: "20px",
-                fontWeight: "500",
+                fontWeight: "800",
                 width: "100%",
               }}
             >
