@@ -5,7 +5,7 @@ import ApiDocs from "./components/ApiDocs";
 
 const projectIds = {
   sodium: 394468,
-  iris: 1181141,
+  iris: 455508,
   elytraAssistant: 1181141,
   //jeiJustEnoughItems: 238222,
   //waystones: 245755,
@@ -59,7 +59,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.sodium}`}
+                    href="https://www.curseforge.com/minecraft/mc-mods/sodium"
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -86,7 +86,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.sodium}`}
+                    href="https://www.curseforge.com/minecraft/mc-mods/sodium"
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -112,7 +112,7 @@ export default function Home() {
                 </h3>
                 <div className="space-y-4">
                   <a
-                    href={`https://www.curseforge.com/minecraft/mc-mods/${projectIds.elytraAssistant}`}
+                    href="https://www.curseforge.com/minecraft/mc-mods/elytra-assistant"
                     className="inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
