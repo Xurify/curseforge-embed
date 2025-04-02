@@ -69,7 +69,7 @@ export const FullVariant = ({
               width: "110px",
               height: "110px",
               ...(!iconUrl && {
-                background: "linear-gradient(180deg, #10B981 0%, #157a59 100%)",
+                background: "linear-gradient(180deg, #EB622B 0%, #b6491e 100%)",
               }),
               borderRadius: "8px",
               overflow: "hidden",
@@ -176,7 +176,7 @@ export const FullVariant = ({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
-                backgroundColor: "#10B981",
+                backgroundColor: themeColors.button,
                 color: "white",
                 padding: "12px 24px",
                 borderRadius: "8px",

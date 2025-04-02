@@ -141,7 +141,7 @@ export async function GET(
         text: "#1f2937",
         secondaryText: "#585858",
         border: "#e5e7eb",
-        button: "#10B981",
+        button: "#EB622B",
         buttonText: "#ffffff",
       },
       dark: {
@@ -150,7 +150,7 @@ export async function GET(
         text: "#ffffff",
         secondaryText: "#9BA0A4",
         border: "#404040",
-        button: "#10B981",
+        button: "#EB622B",
         buttonText: "#ffffff",
       },
     };
