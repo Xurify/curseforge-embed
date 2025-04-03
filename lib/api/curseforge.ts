@@ -89,7 +89,7 @@ export class CurseForgeAPI {
 
   /**
    * Get the latest version of a project
-   * @param jsonData The JSON data of the project
+   * @param CurseForgeProject
    * @returns The latest version of the project
    */
   static getLatestVersion(project: CurseForgeProject) {
