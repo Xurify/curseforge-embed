@@ -3,6 +3,9 @@
 // import CurseForgeBadge from "./components/CurseForgeBadge";
 // import ApiDocs from "./components/ApiDocs";
 
+export const revalidate = 604800;
+export const dynamic = "force-static";
+
 const projectIds = {
   sodium: 394468,
   iris: 455508,
