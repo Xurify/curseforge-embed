@@ -1,7 +1,7 @@
-import CurseForgeEmbed from "./components/CurseForgeEmbed";
-import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
-import CurseForgeBadge from "./components/CurseForgeBadge";
-import ApiDocs from "./components/ApiDocs";
+// import CurseForgeEmbed from "./components/CurseForgeEmbed";
+// import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
+// import CurseForgeBadge from "./components/CurseForgeBadge";
+// import ApiDocs from "./components/ApiDocs";
 
 const projectIds = {
   sodium: 394468,
@@ -154,7 +154,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-
+          {/* 
           <section>
             <h2 className="text-2xl font-semibold mb-2 text-white">
               Server vs Client Components
@@ -212,7 +212,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </main>
