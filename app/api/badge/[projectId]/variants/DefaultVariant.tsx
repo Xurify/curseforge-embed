@@ -1,4 +1,4 @@
-import { truncate } from "@/lib/utils/utils";
+import { truncate } from "@/lib/utils";
 import { CurseForgeIcon } from "../icons/CurseForgeIcon";
 import { CurseForgeAPI } from "@/lib/api/curseforge";
 

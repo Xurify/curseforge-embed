@@ -1,6 +1,6 @@
 import { CurseForgeProject } from "@/app/types/curseforge";
 import { CurseForgeAPI } from "@/lib/api/curseforge";
-import { truncate } from "@/lib/utils/utils";
+import { truncate } from "@/lib/utils";
 
 interface CompactVariantProps {
   iconUrl?: string;
