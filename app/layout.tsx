@@ -24,10 +24,7 @@ export const metadata: Metadata = {
   description:
     "A simple and easy way to embed CurseForge projects on your website",
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/icon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/icon.png", type: "image/png" }],
   },
   applicationName: "CurseForge Embeds",
   authors: [{ name: "Xurify" }],
