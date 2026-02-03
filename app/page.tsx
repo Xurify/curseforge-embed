@@ -48,7 +48,7 @@ export default function Home() {
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Default Badge
                 </h3>
-                <div className="space-y-4">
+                <div className="flex flex-col space-y-4">
                   <a
                     href="https://www.curseforge.com/minecraft/mc-mods/sodium"
                     className="inline-flex"
@@ -62,7 +62,7 @@ export default function Home() {
                       height="80"
                     />
                   </a>
-                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto self-start">
                     <pre className="text-sm">
                       <code>{`<img src="https://curseforge-embed.vercel.app/394468.png" alt="CurseForge Project" width="340" height="80" />`}</code>
                     </pre>
@@ -74,7 +74,7 @@ export default function Home() {
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Compact Badge
                 </h3>
-                <div className="space-y-4">
+                <div className="flex flex-col space-y-4">
                   <a
                     href="https://www.curseforge.com/minecraft/mc-mods/sodium"
                     className="inline-flex"
@@ -87,7 +87,7 @@ export default function Home() {
                       height="32"
                     />
                   </a>
-                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto self-start">
                     <pre className="text-sm">
                       <code>{`<img src="https://curseforge-embed.vercel.app/394468.png?variant=compact" alt="CurseForge Project" height="32" />`}</code>
                     </pre>
@@ -99,7 +99,7 @@ export default function Home() {
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Full Badge
                 </h3>
-                <div className="space-y-4">
+                <div className="flex flex-col space-y-4">
                   <a
                     href="https://www.curseforge.com/minecraft/mc-mods/elytra-assistant"
                     className="inline-flex"
@@ -108,22 +108,27 @@ export default function Home() {
                   >
                     <img
                       src={`/${projectIds.elytraAssistant}.png?variant=full`}
-                      alt="Sodium"
+                      alt="Elytra Assistant"
                       width="600"
                       height="260"
                     />
                   </a>
-                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto self-start">
                     <pre className="text-sm">
-                      <code>{`<img src="https://curseforge-embed.vercel.app/394468.png?variant=full" alt="CurseForge Project" width="900" height="400" />`}</code>
+                      <code>{`<img src="https://curseforge-embed.vercel.app/${projectIds.elytraAssistant}.png?variant=full" alt="CurseForge Project" width="900" height="400" />`}</code>
                     </pre>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto">
-                <pre className="text-sm">
-                  <code>{`<!-- Basic usage -->
+              <div>
+                <h3 className="font-heading text-2xl font-medium mb-4 text-white">
+                  Usage
+                </h3>
+                <div className="flex">
+                  <div className="bg-[#2D2F31] text-white p-4 rounded-lg overflow-x-auto self-start">
+                    <pre className="text-sm">
+                      <code>{`<!-- Basic usage -->
 <img 
   src="https://curseforge-embed.vercel.app/394468.png"
   alt="CurseForge Project"
@@ -139,7 +144,9 @@ export default function Home() {
 ?showButton=true|false         # Show/hide download button (full variant only)
 ?showPadding=true|false        # Show/hide padding (full variant only)
 `}</code>
-                </pre>
+                    </pre>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
