@@ -13,7 +13,7 @@ export default function Home() {
       <div className="container mx-auto">
         <div className="flex gap-4">
           <img src="/icon.png" alt="CurseForge Embed" className="w-10 h-10" />
-          <h1 className="font-heading text-4xl font-bold mb-4 text-white flex items-center gap-3">
+          <h1 className="font-heading text-4xl font-bold text-white flex items-center gap-3">
             CurseForge Embed
           </h1>
         </div>
