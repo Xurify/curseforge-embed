@@ -26,10 +26,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
-      {
-        url: "/favicon.png",
-        type: "image/png",
-      },
+      { url: "/icon.png", type: "image/png" },
     ],
   },
   applicationName: "CurseForge Embeds",
@@ -58,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icon.png" type="image/png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${vt323.variable} antialiased font-sans`}
