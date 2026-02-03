@@ -22,7 +22,6 @@ export default async function CurseForgeBadge({
           className="block h-full"
         >
           <div className="flex items-center h-full px-3 gap-3 hover:bg-[#373737] transition-colors">
-            {/* Project Icon */}
             <div className="relative w-8 h-8 flex-shrink-0">
               <Image
                 src={data.thumbnail}
@@ -33,13 +32,11 @@ export default async function CurseForgeBadge({
               />
             </div>
 
-            {/* Project Info */}
             <div className="flex-1 min-w-0">
               <h2 className="text-white font-medium text-sm truncate">
                 {data.title}
               </h2>
               <div className="flex items-center gap-3 text-xs text-[#9B9B9B]">
-                {/* Downloads */}
                 <span className="flex items-center gap-1">
                   <svg
                     className="w-3.5 h-3.5"
@@ -57,7 +54,6 @@ export default async function CurseForgeBadge({
                   {CurseForgeAPI.formatNumber(data.downloads.total)}
                 </span>
 
-                {/* Game Version */}
                 <span className="flex items-center gap-1">
                   <svg
                     className="w-3.5 h-3.5"
@@ -75,7 +71,6 @@ export default async function CurseForgeBadge({
                   {data.download.versions[0]}
                 </span>
 
-                {/* Last Updated */}
                 <span className="flex items-center gap-1">
                   <svg
                     className="w-3.5 h-3.5"
@@ -95,7 +90,6 @@ export default async function CurseForgeBadge({
               </div>
             </div>
 
-            {/* CurseForge Logo */}
             <div className="flex-shrink-0">
               <svg
                 className="w-5 h-5 text-[#EB622B]"

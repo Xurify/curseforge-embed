@@ -33,8 +33,6 @@ export async function GET(
   const showButton = searchParams.get("showButton") !== "false";
   const showPadding = searchParams.get("showPadding") === "true";
 
-  // Prefer internal API when NEXT_PUBLIC_APP_URL is set (Next.js fetch cache, single source).
-  // Fall back to direct cfwidget fetch when unset (e.g. local dev without env).
   const data = process.env.NEXT_PUBLIC_APP_URL
     ? await CurseForgeAPI.getProject(Number(projectId))
     : await getProjectFromExternal(Number(projectId));
@@ -112,7 +110,6 @@ export async function GET(
     const formattedDownloads = CurseForgeAPI.formatNumber(
       parseInt(downloads, 10),
     );
-    //const cacheDuration = CurseForgeAPI.getCacheDuration(parseInt(downloads, 10));
 
     const generateCompactDimensions = (project: CurseForgeProject) => {
       const height = 32;
@@ -223,7 +220,6 @@ export async function GET(
       return new Response("Invalid variant", { status: 400 });
     }
 
-    // Load Jost for badge text (used by all variants)
     const fontsDir = join(process.cwd(), "public/assets/fonts");
     const [jost400, jost700] = await Promise.all([
       readFile(join(fontsDir, "Jost-Regular.ttf")),

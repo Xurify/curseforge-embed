@@ -1,8 +1,3 @@
-// import CurseForgeEmbed from "./components/CurseForgeEmbed";
-// import ClientCurseForgeEmbed from "./components/ClientCurseForgeEmbed";
-// import CurseForgeBadge from "./components/CurseForgeBadge";
-// import ApiDocs from "./components/ApiDocs";
-
 export const revalidate = 604800;
 export const dynamic = "force-static";
 
@@ -10,8 +5,6 @@ const projectIds = {
   sodium: 394468,
   iris: 455508,
   elytraAssistant: 1181141,
-  //jeiJustEnoughItems: 238222,
-  //waystones: 245755,
 };
 
 export default function Home() {
@@ -51,7 +44,6 @@ export default function Home() {
             </p>
 
             <div className="space-y-8">
-              {/* Default Variant */}
               <div>
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Default Badge
@@ -78,7 +70,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Compact Variant */}
               <div>
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Compact Badge
@@ -104,7 +95,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Full Variant */}
               <div>
                 <h3 className="font-heading text-2xl font-medium mb-4 text-white">
                   Full Badge
@@ -117,7 +107,7 @@ export default function Home() {
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={`/${projectIds.sodium}.png?variant=full`}
+                      src={`/${projectIds.elytraAssistant}.png?variant=full`}
                       alt="Sodium"
                       width="600"
                       height="260"
@@ -153,65 +143,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-          {/* 
-          <section>
-            <h2 className="text-2xl font-semibold mb-2 text-white">
-              Server vs Client Components
-            </h2>
-            <p className="text-gray-400 mb-6">
-              Choose between server components (better for SEO and initial load)
-              or client components (better for dynamic updates and loading
-              states).
-            </p>
-
-            <div className="grid gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="text-xl font-medium mb-4 text-white flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-brand"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Server Component
-                </h3>
-                <div className="max-w-2xl">
-                  <CurseForgeEmbed projectId={projectIds.iris} />
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-medium mb-4 text-white flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-brand"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                  Client Component
-                </h3>
-                <div className="max-w-2xl">
-                  <ClientCurseForgeEmbed
-                    projectId={projectIds.elytraAssistant}
-                  />
-                </div>
-              </div>
-            </div>
-          </section> */}
         </div>
       </div>
     </main>
