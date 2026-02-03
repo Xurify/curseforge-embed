@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -14,15 +14,19 @@ export default function NotFound() {
           </svg>
         </div>
          */}
-        <h1 className="text-6xl font-bold text-[#141414] mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-[#141414] mb-4">Page Not Found</h2>
+        <h1 className="font-heading text-6xl font-bold text-[#141414] mb-4">
+          404
+        </h1>
+        <h2 className="font-heading text-2xl font-semibold text-[#141414] mb-4">
+          Page Not Found
+        </h2>
         <p className="text-[#6D7072] mb-8 max-w-md mx-auto">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved. 
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
 
-        <Link 
+        <Link
           href="/"
-          className="inline-flex items-center gap-2 bg-[#EB622B] text-white px-6 py-3 rounded-lg hover:bg-[#d45624] transition-colors"
+          className="inline-flex items-center gap-2 bg-[#EB622B] hover:bg-[#d45624] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
         >
           <svg
             className="w-5 h-5"
@@ -41,5 +45,5 @@ export default function NotFound() {
         </Link>
       </div>
     </main>
-  )
+  );
 }

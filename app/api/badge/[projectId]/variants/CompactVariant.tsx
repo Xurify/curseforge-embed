@@ -5,79 +5,46 @@ import { truncate } from "@/lib/utils";
 interface CompactVariantProps {
   iconUrl?: string;
   project: CurseForgeProject;
-  themeColors: {
-    background: string;
-    background2: string;
-    text: string;
-    secondaryText: string;
-    border: string;
-    button: string;
-    buttonText: string;
-  };
   showVersion: boolean;
   showDownloads: boolean;
   width: number;
   versionNumber: string;
 }
 
-export const CompactVariant = ({
+export default function CompactVariant({
   iconUrl,
   project,
-  themeColors,
   showDownloads,
   showVersion,
   width,
   versionNumber,
-}: CompactVariantProps) => {
+}: CompactVariantProps) {
   return (
     <div
-      style={{
-        height: 32,
-        width,
-        display: "flex",
-        alignItems: "center",
-        padding: 12,
-        backgroundColor: themeColors.background,
-        border: `1px solid ${themeColors.border}`,
-        borderRadius: 6,
-      }}
+      tw="flex items-center h-8 bg-[#16181C] border border-[#2D2D35] rounded-lg px-3 font-sans"
+      style={{ width }}
     >
-      {iconUrl && (
+      {project.thumbnail && (
         <img
           src={iconUrl}
           alt=""
-          width={24}
-          height={24}
-          style={{
-            borderRadius: 4,
-            marginRight: 8,
-          }}
+          width={20}
+          height={20}
+          tw="rounded-md h-5 w-5 mr-2"
+          style={{ objectFit: "contain" }}
         />
       )}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          color: themeColors.text,
-          fontSize: 14,
-          fontWeight: 500,
-        }}
-      >
-        <span>{truncate(project.title, 20)}</span>
+      <div tw="flex items-center gap-2 text-white text-[15px] font-bold">
+        <span tw="truncate">{truncate(project.title, 20)}</span>
         {showDownloads && (
-          <span style={{ color: themeColors.secondaryText }}>
+          <span tw="text-[#A1A1AA] font-medium ml-1">
             {CurseForgeAPI.formatNumber(project.downloads.total)}
           </span>
         )}
         {showVersion && versionNumber && (
-          <span style={{ color: themeColors.secondaryText }}>
-            v{versionNumber}
-          </span>
+          <span tw="text-[#A1A1AA] font-medium ml-1">v{versionNumber}</span>
         )}
       </div>
     </div>
   );
-};
-
-export default CompactVariant;
+}

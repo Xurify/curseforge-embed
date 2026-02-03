@@ -9,6 +9,62 @@ interface LatestVersion {
   minecraftVersions: string[];
 }
 
+const CFWIDGET_BASE = "https://api.cfwidget.com";
+
+/**
+ * Fetch project data directly from cfwidget (server-side only).
+ * Fallback when NEXT_PUBLIC_APP_URL is unset; no Next.js fetch cache.
+ */
+export async function getProjectFromExternal(
+  projectId: number,
+): Promise<CurseForgeProject | null> {
+  try {
+    const response = await fetch(`${CFWIDGET_BASE}/${projectId}`, {
+      headers: {
+        "User-Agent": "xurify/curseforge-embed/1.0.0 (contact@xurify.com)",
+      },
+    });
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      console.error(`Failed to fetch project data: ${response.status}`);
+      return null;
+    }
+
+    const fullData = await response.json();
+    const latestVersion =
+      CurseForgeAPI.getLatestVersion(fullData)?.version ?? null;
+
+    return {
+      id: fullData.id,
+      title: fullData.title,
+      summary: fullData.summary,
+      description: fullData.description?.substring(0, 5000),
+      game: fullData.game,
+      type: fullData.type,
+      urls: fullData.urls,
+      thumbnail: fullData.thumbnail,
+      created_at: fullData.created_at,
+      downloads: fullData.downloads,
+      license: fullData.license,
+      donate: fullData.donate,
+      categories: fullData.categories,
+      members: fullData.members,
+      links: fullData.links,
+      files: fullData.files,
+      versions: fullData.versions,
+      download: fullData.download,
+      latestVersion: latestVersion ?? "",
+    };
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 /**
  * CurseForge API wrapper
  * Based on the cfwidget.com API: https://api.cfwidget.com/
@@ -16,22 +72,23 @@ interface LatestVersion {
 export class CurseForgeAPI {
   public static DEFAULT_REVALIDATE = 3600;
   /**
-   * Get a project by ID
-   * @param projectId The CurseForge project ID
-   * @param options Optional fetch configuration
-   * @returns Promise with the project data
+   * Get a project by ID via the app's /api/curseforge when NEXT_PUBLIC_APP_URL is set.
+   * Uses Next.js fetch cache (revalidate) and shares cache with other API consumers.
    */
-
   static async getProject(
     projectId: number,
     options: { revalidate?: number } = {},
   ): Promise<CurseForgeProject | null> {
     const { revalidate = CurseForgeAPI.DEFAULT_REVALIDATE } = options;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
     try {
       const url = new URL(
         `/api/curseforge/${projectId}`,
-        process.env.NEXT_PUBLIC_APP_URL,
+        baseUrl ||
+          (typeof window !== "undefined"
+            ? window.location.origin
+            : "http://localhost:3000"),
       );
       const response = await fetch(url, {
         next: {

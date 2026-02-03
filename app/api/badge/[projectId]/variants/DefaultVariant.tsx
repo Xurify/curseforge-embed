@@ -1,6 +1,5 @@
 import { truncate } from "@/lib/utils";
 import { CurseForgeIcon } from "../icons/CurseForgeIcon";
-import { CurseForgeAPI } from "@/lib/api/curseforge";
 
 interface DefaultVariantProps {
   iconUrl?: string;
@@ -17,121 +16,56 @@ export default function DefaultVariant({
   downloads,
   theme,
 }: DefaultVariantProps) {
+  const isDark = theme === "dark";
+  const iconColor = isDark ? "#9ca3af" : "#6B7280";
+
   return (
     <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        background: theme === "dark" ? "#2D2D2D" : "#F8F9F9",
-        border: `3px solid ${theme === "dark" ? "#404040" : "#D9D9D9"}`,
-        borderRadius: "8px",
-        padding: "16px 24px",
-        color: theme === "dark" ? "#E1E3E5" : "#242729",
-        fontFamily: "Jost, sans-serif",
-        boxShadow:
-          theme === "dark"
-            ? "0 1px 3px rgba(0,0,0,0.15)"
-            : "0 1px 2px rgba(0,0,0,0.05)",
-      }}
+      tw={`flex items-center w-full h-full gap-6 ${
+        isDark ? "bg-[#1a1c20] border-[#2D2D35]" : "bg-white border-[#E5E7EB]"
+      } border-2 rounded-2xl p-6 font-sans shadow-xl`}
     >
-      {/* Logo/Icon */}
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "110px",
-          height: "110px",
-          ...(!iconUrl && {
-            background: "linear-gradient(180deg, #EB622B 0%, #D44A1A 100%)",
-          }),
-          borderRadius: "8px",
-          marginRight: "16px",
-          overflow: "hidden",
-          flexShrink: 0,
-        }}
+        tw={`flex items-center justify-center w-[110px] h-[110px] rounded-2xl overflow-hidden flex-shrink-0 p-2 ${
+          !iconUrl ? "bg-[#EB622B]" : "bg-[#26292e]"
+        }`}
       >
         {iconUrl ? (
           <img
             src={iconUrl}
-            width="100%"
-            height="100%"
-            style={{
-              objectFit: "contain",
-              imageRendering: "crisp-edges",
-            }}
+            tw="w-full h-full object-contain rounded-xl"
+            style={{ objectFit: "contain" }}
             alt="Mod logo"
           />
         ) : (
-          <div
-            style={{
-              fontSize: "32px",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          >
+          <div tw="text-4xl font-bold text-white">
             {modName.substring(0, 1)}
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          height: "100%",
-          flex: 1,
-          minWidth: 0,
-          lineHeight: 1.4,
-        }}
-      >
-        {/* Mod Name */}
+      <div tw="flex flex-col justify-center h-full flex-1 min-w-0">
         <div
-          style={{
-            fontSize: "36px",
-            fontWeight: 700,
-            color: theme === "dark" ? "#FFFFFF" : "#242729",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            marginBottom: "12px",
-            letterSpacing: "-0.1px",
-          }}
+          tw={`text-4xl font-bold ${
+            isDark ? "text-white" : "text-[#1F2937]"
+          } truncate mb-2 tracking-tight`}
         >
           {truncate(modName, 20)}
         </div>
 
-        {/* Stats Row */}
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "24px",
-            color: theme === "dark" ? "#9BA0A4" : "#6A737C",
-            fontSize: "28px",
-            fontWeight: 500,
-          }}
+          tw={`flex items-center gap-6 ${
+            isDark ? "text-[#9ca3af]" : "text-[#6B7280]"
+          } text-2xl font-medium`}
         >
-          {/* Downloads */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
+          <div tw="flex items-center gap-2">
             <svg
-              width="32"
-              height="32"
+              width="28"
+              height="28"
               fill="none"
-              stroke="currentColor"
+              stroke={isDark ? "#EB622B" : iconColor}
               viewBox="0 0 24 24"
-              strokeWidth="2px"
+              strokeWidth="2.5"
             >
               <path
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
@@ -139,37 +73,28 @@ export default function DefaultVariant({
                 strokeLinejoin="round"
               />
             </svg>
-            <span>{downloads}</span>
+            <span style={isDark ? { color: "white", fontWeight: "bold" } : {}}>
+              {downloads}
+            </span>
           </div>
 
-          {/* Author */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <svg
-              width="32"
-              height="32"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="2px"
+          <div tw="flex items-center gap-2">
+            <span tw={isDark ? "text-[#9ca3af]" : ""}>by</span>
+            <span
+              style={isDark ? { color: "#EB622B", fontWeight: "bold" } : {}}
             >
-              <path
-                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span>{truncate(author || "Unknown", 15)}</span>
+              {truncate(author || "Unknown", 15)}
+            </span>
           </div>
         </div>
       </div>
 
-      <CurseForgeIcon />
+      <div
+        tw="ml-auto flex-shrink-0 flex items-center"
+        style={{ width: 40, height: 25 }}
+      >
+        <CurseForgeIcon />
+      </div>
     </div>
   );
 }

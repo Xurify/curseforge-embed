@@ -1,11 +1,12 @@
-import { ImageResponse } from "next/og";
-import { ImageResponseOptions, NextRequest } from "next/server";
+import { ImageResponse, ImageResponseOptions } from "@takumi-rs/image-response";
+import { NextRequest } from "next/server";
 import { join } from "path";
 import { readFile } from "fs/promises";
 import sharp from "sharp";
 import crypto from "crypto";
-import { CurseForgeAPI } from "@/lib/api/curseforge";
+import { CurseForgeAPI, getProjectFromExternal } from "@/lib/api/curseforge";
 import { CurseForgeProject } from "@/app/types/curseforge";
+import { truncate } from "@/lib/utils";
 import DefaultVariant from "./variants/DefaultVariant";
 import FullVariant from "./variants/FullVariant";
 import CompactVariant from "./variants/CompactVariant";
@@ -24,11 +25,19 @@ export async function GET(
     "default";
   const theme = (searchParams.get("theme") as "dark" | "light") || "dark";
   const showDownloads = searchParams.get("showDownloads") !== "false";
-  const showVersion = searchParams.get("showVersion") !== "false";
+  const showVersionParam = searchParams.get("showVersion");
+  const showVersion =
+    variant === "compact"
+      ? showVersionParam === "true"
+      : showVersionParam !== "false";
   const showButton = searchParams.get("showButton") !== "false";
   const showPadding = searchParams.get("showPadding") === "true";
 
-  const data = await CurseForgeAPI.getProject(Number(projectId));
+  // Prefer internal API when NEXT_PUBLIC_APP_URL is set (Next.js fetch cache, single source).
+  // Fall back to direct cfwidget fetch when unset (e.g. local dev without env).
+  const data = process.env.NEXT_PUBLIC_APP_URL
+    ? await CurseForgeAPI.getProject(Number(projectId))
+    : await getProjectFromExternal(Number(projectId));
 
   const contentHash = crypto
     .createHash("md5")
@@ -89,7 +98,13 @@ export async function GET(
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const pngBuffer = await sharp(buffer).png().toBuffer();
+      const pngBuffer = await sharp(buffer)
+        .resize(280, 280, {
+          fit: "contain",
+          background: { r: 0, g: 0, b: 0, alpha: 0 },
+        })
+        .png()
+        .toBuffer();
 
       iconUrl = `data:image/png;base64,${pngBuffer.toString("base64")}`;
     }
@@ -101,30 +116,59 @@ export async function GET(
 
     const generateCompactDimensions = (project: CurseForgeProject) => {
       const height = 32;
-      const fontSize = 14;
-      const padding = 12;
-      const iconSize = 24;
-      let width = padding * 2 + project.title.length * (fontSize * 0.6);
-      if (project.thumbnail) width += iconSize + 8;
-      if (showDownloads)
-        width +=
-          CurseForgeAPI.formatNumber(project.downloads.total).length *
-            (fontSize * 0.6) +
-          16;
-      if (showVersion && latestVersion)
-        width += latestVersion.toString().length * (fontSize * 0.6) + 24;
+      const fontSize = 15;
+      const paddingX = 12;
+      const iconSize = 20;
+      const gap = 8;
+      const textGap = 8;
+      const avgCharWidth = fontSize * 0.65;
 
-      return { width, height };
+      const titleWidth = truncate(project.title, 20).length * avgCharWidth;
+      const downloadsWidth = showDownloads
+        ? CurseForgeAPI.formatNumber(project.downloads.total).length *
+          (fontSize * 0.55)
+        : 0;
+      const versionWidth =
+        showVersion && latestVersion
+          ? `v${latestVersion}`.length * (fontSize * 0.55)
+          : 0;
+
+      let width = paddingX * 2 + titleWidth;
+      if (project.thumbnail) width += iconSize + gap;
+      if (showDownloads) width += downloadsWidth + textGap;
+      if (showVersion && latestVersion) width += versionWidth + textGap;
+
+      return { width: Math.ceil(width), height };
     };
+
+    const fullLayout = {
+      paddingY: 56,
+      gap: 24,
+      headerHeight: 140,
+      descriptionHeight: 80,
+      statsHeight: 52,
+      buttonHeight: 56,
+      innerBorderWidth: 2,
+      outerPaddingY: showPadding ? 48 : 0,
+    };
+    const fullInnerHeight =
+      fullLayout.paddingY * 2 +
+      fullLayout.headerHeight +
+      fullLayout.descriptionHeight +
+      fullLayout.statsHeight +
+      fullLayout.gap * (showButton ? 3 : 2) +
+      (showButton ? fullLayout.buttonHeight : 0) +
+      fullLayout.innerBorderWidth * 2;
+    const fullHeight = fullInnerHeight + fullLayout.outerPaddingY * 2;
 
     const OPTIONS: Record<string, ImageResponseOptions> = {
       default: {
         width: 680,
-        height: 160,
+        height: 164,
       },
       full: {
-        width: showPadding ? 1200 : 900,
-        height: showPadding ? 600 : 405,
+        width: showPadding ? 936 : 840,
+        height: fullHeight,
       },
       compact: {
         width: generateCompactDimensions(data).width,
@@ -133,29 +177,6 @@ export async function GET(
     };
 
     const options = OPTIONS[variant];
-
-    const colors = {
-      light: {
-        background: "#ffffff",
-        background2: "#f9fafb",
-        text: "#1f2937",
-        secondaryText: "#585858",
-        border: "#e5e7eb",
-        button: "#EB622B",
-        buttonText: "#ffffff",
-      },
-      dark: {
-        background: "#2D2D2D",
-        background2: "#16181C",
-        text: "#ffffff",
-        secondaryText: "#9BA0A4",
-        border: "#404040",
-        button: "#EB622B",
-        buttonText: "#ffffff",
-      },
-    };
-
-    const themeColors = theme === "dark" ? colors.dark : colors.light;
 
     const getVariant = () => {
       switch (variant) {
@@ -174,7 +195,6 @@ export async function GET(
             <FullVariant
               iconUrl={iconUrl}
               project={data}
-              themeColors={themeColors}
               showPadding={showPadding}
               showDownloads={showDownloads}
               showVersion={showVersion}
@@ -187,7 +207,6 @@ export async function GET(
             <CompactVariant
               iconUrl={iconUrl}
               project={data}
-              themeColors={themeColors}
               showDownloads={showDownloads}
               showVersion={showVersion}
               versionNumber={latestVersion || ""}
@@ -228,7 +247,7 @@ export async function GET(
         },
       ],
       headers: {
-        "Cache-Control": `public, max-age=3600, stale-while-revalidate=7200`,
+        "Cache-Control": `public, max-age=86400, s-maxage=86400, stale-while-revalidate=${86400 * 1.5}`,
         ETag: etag,
         Vary: "Accept, Accept-Encoding",
       },
