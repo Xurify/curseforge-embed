@@ -223,28 +223,18 @@ export async function GET(
       return new Response("Invalid variant", { status: 400 });
     }
 
-    const jost400 = await readFile(
-      join(process.cwd(), "public/assets/fonts/Jost-Regular.ttf"),
-    );
-    const jost700 = await readFile(
-      join(process.cwd(), "public/assets/fonts/Jost-Bold.ttf"),
-    );
+    // Load Jost for badge text (used by all variants)
+    const fontsDir = join(process.cwd(), "public/assets/fonts");
+    const [jost400, jost700] = await Promise.all([
+      readFile(join(fontsDir, "Jost-Regular.ttf")),
+      readFile(join(fontsDir, "Jost-Bold.ttf")),
+    ]);
 
     return new ImageResponse(component, {
       ...options,
       fonts: [
-        {
-          name: "Jost",
-          data: jost400,
-          weight: 400,
-          style: "normal",
-        },
-        {
-          name: "Jost",
-          data: jost700,
-          weight: 700,
-          style: "normal",
-        },
+        { name: "Jost", data: jost400, weight: 400, style: "normal" },
+        { name: "Jost", data: jost700, weight: 700, style: "normal" },
       ],
       headers: {
         "Cache-Control": `public, max-age=86400, s-maxage=86400, stale-while-revalidate=${86400 * 1.5}`,
