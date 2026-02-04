@@ -32,6 +32,14 @@ export async function GET(
       : showVersionParam !== "false";
   const showButton = searchParams.get("showButton") !== "false";
   const showPadding = searchParams.get("showPadding") === "true";
+  /** Compact only: 1 or 2. 2 = 2x resolution for sharp display on retina. */
+  const scale =
+    variant === "compact"
+      ? Math.min(
+          2,
+          Math.max(1, parseInt(searchParams.get("scale") ?? "1", 10) || 1),
+        )
+      : 1;
 
   const data = process.env.NEXT_PUBLIC_APP_URL
     ? await CurseForgeAPI.getProject(Number(projectId))
@@ -53,6 +61,7 @@ export async function GET(
           showVersion,
           showButton,
           showPadding,
+          scale,
         },
       }),
     )
@@ -115,7 +124,7 @@ export async function GET(
       const height = 32;
       const fontSize = 15;
       const paddingX = 12;
-      const iconSize = 20;
+      const iconSize = 16;
       const gap = 8;
       const textGap = 8;
       const avgCharWidth = fontSize * 0.65;
@@ -135,7 +144,9 @@ export async function GET(
       if (showDownloads) width += downloadsWidth + textGap;
       if (showVersion && latestVersion) width += versionWidth + textGap;
 
-      return { width: Math.ceil(width), height };
+      const w = Math.ceil(width);
+      const h = height;
+      return { width: w, height: h };
     };
 
     const fullLayout = {
@@ -167,10 +178,10 @@ export async function GET(
         width: showPadding ? 936 : 840,
         height: fullHeight,
       },
-      compact: {
-        width: generateCompactDimensions(data).width,
-        height: generateCompactDimensions(data).height,
-      },
+      compact: (() => {
+        const { width: w, height: h } = generateCompactDimensions(data);
+        return { width: w * scale, height: h * scale };
+      })(),
     };
 
     const options = OPTIONS[variant];
@@ -208,6 +219,7 @@ export async function GET(
               showVersion={showVersion}
               versionNumber={latestVersion || ""}
               width={generateCompactDimensions(data).width}
+              scale={scale}
             />
           );
         default:
