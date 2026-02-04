@@ -32,7 +32,7 @@ export default function Home() {
           <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl font-bold text-white tracking-tight mb-4">
             CurseForge
             <br />
-            <span className="text-brand">Embed</span>
+            <span className="text-brand">Embeds</span>
           </h1>
           <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             A modern way to embed CurseForge projects on your website, powered
