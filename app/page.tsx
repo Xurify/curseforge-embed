@@ -1,7 +1,7 @@
+import CopyButton from "./components/CopyButton";
+
 export const revalidate = 604800;
 export const dynamic = "force-static";
-
-import CopyButton from "./components/CopyButton";
 
 const projectIds = {
   sodium: 394468,

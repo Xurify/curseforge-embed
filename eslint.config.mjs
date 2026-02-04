@@ -1,19 +1,8 @@
-import { FlatCompat } from "@eslint/eslintrc";
+import next from "eslint-config-next";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-});
-
-const eslintConfig = [
-  ...compat.config({
-    extends: ["next"],
-    rules: {
-      "@next/next/no-img-element": "off",
-    },
-    // rules: {
-    //   'react/no-unescaped-entities': 'off',
-    //   '@next/next/no-page-custom-font': 'off',
-    // },
-  }),
-];
+const eslintConfig = [...next, ...nextCoreWebVitals, ...nextTypescript, {
+  ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"]
+}];
 export default eslintConfig;
