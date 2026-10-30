@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { CurseForgeAPI } from "@/lib/api/curseforge";
 import { CurseForgeEmbedError } from "@/app/components/CurseForgeEmbedError";
 import { CurseForgeEmbedSkeleton } from "@/app/components/CurseForgeEmbedSkeleton";
+import { CurseForgeProject } from "@/app/types/curseforge";
 
 export default async function ProjectPage({
   params,
@@ -17,16 +18,17 @@ export default async function ProjectPage({
     return notFound();
   }
 
+  let data: CurseForgeProject | null = null;
   try {
-    const data = await CurseForgeAPI.getProject(Number(projectId), {
+    data = await CurseForgeAPI.getProject(Number(projectId), {
       revalidate: Number(revalidate),
     });
-    if (!data) {
-      return notFound();
-    }
-    return <CurseForgeEmbedSkeleton data={data} size={size} />;
   } catch (error) {
     console.error("Error fetching project data:", error);
     return <CurseForgeEmbedError />;
   }
+  if (!data) {
+    return notFound();
+  }
+  return <CurseForgeEmbedSkeleton data={data} size={size} />;
 }

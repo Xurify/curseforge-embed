@@ -169,7 +169,7 @@ export class CurseForgeAPI {
         : project.files;
 
     // Find the latest file by upload date
-    let latestFile = filesToCheck.reduce((latest, current) => {
+    const latestFile = filesToCheck.reduce((latest, current) => {
       const latestDate = new Date(latest.uploaded_at);
       const currentDate = new Date(current.uploaded_at);
       return currentDate > latestDate ? current : latest;

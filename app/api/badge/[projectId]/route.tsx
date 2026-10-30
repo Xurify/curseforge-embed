@@ -1,4 +1,4 @@
-import { ImageResponse, ImageResponseOptions } from "@takumi-rs/image-response";
+import { ImageResponse, ImageResponseOptions } from "takumi-js/response";
 import { NextRequest } from "next/server";
 import { join } from "path";
 import { readFile } from "fs/promises";
